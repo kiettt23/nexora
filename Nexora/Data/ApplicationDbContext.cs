@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Nexora.Data.Seeds;
 using Nexora.Models;
 
 namespace Nexora.Data;
@@ -106,48 +107,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasIndex(v => v.Code).IsUnique();
         });
 
-        // Seed categories
-        builder.Entity<Category>().HasData(
-            new Category { Id = 1, Name = "Dien thoai", Slug = "dien-thoai", Description = "Smartphone cao cap", SortOrder = 1 },
-            new Category { Id = 2, Name = "Laptop", Slug = "laptop", Description = "Laptop van phong va gaming", SortOrder = 2 },
-            new Category { Id = 3, Name = "Tablet", Slug = "tablet", Description = "May tinh bang", SortOrder = 3 },
-            new Category { Id = 4, Name = "Phu kien", Slug = "phu-kien", Description = "Phu kien cong nghe", SortOrder = 4 }
-        );
-
-        // Seed shop config
-        builder.Entity<ShopConfig>().HasData(
-            new ShopConfig { Id = 1, Key = "ShopName", Value = "Nexora", Type = "string" },
-            new ShopConfig { Id = 2, Key = "Phone", Value = "0123456789", Type = "string" },
-            new ShopConfig { Id = 3, Key = "Email", Value = "contact@nexora.vn", Type = "string" },
-            new ShopConfig { Id = 4, Key = "Address", Value = "TP. Ho Chi Minh, Viet Nam", Type = "string" }
-        );
-
-        // Seed vouchers
-        builder.Entity<Voucher>().HasData(
-            new Voucher
-            {
-                Id = 1, Code = "WELCOME10", Description = "Giảm 10% cho đơn đầu tiên",
-                DiscountPercent = 10, MaxDiscountAmount = 500000, MinOrderAmount = 1000000,
-                UsageLimit = 100,
-                StartDate = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                EndDate = new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-            },
-            new Voucher
-            {
-                Id = 2, Code = "NEXORA50K", Description = "Giảm 50.000đ cho đơn từ 500K",
-                DiscountAmount = 50000, MinOrderAmount = 500000,
-                UsageLimit = 200,
-                StartDate = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                EndDate = new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-            },
-            new Voucher
-            {
-                Id = 3, Code = "FREESHIP", Description = "Giảm 30.000đ phí vận chuyển",
-                DiscountAmount = 30000, MinOrderAmount = 300000,
-                UsageLimit = 500,
-                StartDate = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                EndDate = new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-            }
-        );
+        // Seed data (separated into individual files)
+        CategorySeed.Seed(builder);
+        ShopConfigSeed.Seed(builder);
+        VoucherSeed.Seed(builder);
     }
 }

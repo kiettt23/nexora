@@ -18,46 +18,32 @@ public static class SeedData
                 await roleManager.CreateAsync(new IdentityRole(role));
         }
 
-        // Create admin
-        if (await userManager.FindByEmailAsync("admin@nexora.vn") == null)
-        {
-            var admin = new ApplicationUser
-            {
-                UserName = "admin@nexora.vn",
-                Email = "admin@nexora.vn",
-                FullName = "Admin Nexora",
-                EmailConfirmed = true
-            };
-            await userManager.CreateAsync(admin, "Admin@123");
-            await userManager.AddToRoleAsync(admin, "Admin");
-        }
+        // Seed users
+        await SeedUserAsync(userManager, "admin@nexora.vn", "Admin Nexora", "Admin@123", "Admin");
+        await SeedUserAsync(userManager, "staff@nexora.vn", "Nguyễn Văn Bình", "Staff@123", "Staff");
+        await SeedUserAsync(userManager, "staff2@nexora.vn", "Trần Thị Cẩm", "Staff@123", "Staff");
+        await SeedUserAsync(userManager, "customer@nexora.vn", "Lê Hoàng Dũng", "Customer@123", "Customer");
+        await SeedUserAsync(userManager, "ngoclan@gmail.com", "Phạm Ngọc Lan", "Customer@123", "Customer");
+        await SeedUserAsync(userManager, "minhtuan@gmail.com", "Võ Minh Tuấn", "Customer@123", "Customer");
+        await SeedUserAsync(userManager, "thuhang@gmail.com", "Đặng Thu Hằng", "Customer@123", "Customer");
+        await SeedUserAsync(userManager, "quocviet@gmail.com", "Huỳnh Quốc Việt", "Customer@123", "Customer");
+    }
 
-        // Create staff
-        if (await userManager.FindByEmailAsync("staff@nexora.vn") == null)
-        {
-            var staff = new ApplicationUser
-            {
-                UserName = "staff@nexora.vn",
-                Email = "staff@nexora.vn",
-                FullName = "Staff Nexora",
-                EmailConfirmed = true
-            };
-            await userManager.CreateAsync(staff, "Staff@123");
-            await userManager.AddToRoleAsync(staff, "Staff");
-        }
+    private static async Task SeedUserAsync(
+        UserManager<ApplicationUser> userManager,
+        string email, string fullName, string password, string role)
+    {
+        if (await userManager.FindByEmailAsync(email) != null)
+            return;
 
-        // Create customer
-        if (await userManager.FindByEmailAsync("customer@nexora.vn") == null)
+        var user = new ApplicationUser
         {
-            var customer = new ApplicationUser
-            {
-                UserName = "customer@nexora.vn",
-                Email = "customer@nexora.vn",
-                FullName = "Khach Hang",
-                EmailConfirmed = true
-            };
-            await userManager.CreateAsync(customer, "Customer@123");
-            await userManager.AddToRoleAsync(customer, "Customer");
-        }
+            UserName = email,
+            Email = email,
+            FullName = fullName,
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(user, password);
+        await userManager.AddToRoleAsync(user, role);
     }
 }
