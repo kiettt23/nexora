@@ -14,7 +14,7 @@
 </div>
 
 <div class="max-w-3xl">
-    <form asp-action="Create" method="post" class="bg-base-200 rounded-box p-6 shadow-sm space-y-5">
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="bg-base-200 rounded-box p-6 shadow-sm space-y-5">
         <div asp-validation-summary="All" class="alert alert-error text-sm"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -77,7 +77,13 @@
         </div>
 
         <div class="form-control">
-            <label class="label"><span class="label-text">URL hình ảnh (cách nhau dấu phẩy)</span></label>
+            <label class="label"><span class="label-text">Tải ảnh lên</span></label>
+            <input asp-for="ImageFiles" type="file" multiple accept="image/*" class="file-input file-input-bordered w-full" />
+            <label class="label"><span class="label-text-alt">Chọn nhiều ảnh cùng lúc. Ảnh đầu tiên sẽ là ảnh chính.</span></label>
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Hoặc nhập URL ảnh (cách nhau dấu phẩy)</span></label>
             <textarea asp-for="ImageUrls" class="textarea textarea-bordered" rows="2"
                       placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"></textarea>
         </div>

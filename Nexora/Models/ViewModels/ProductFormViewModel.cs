@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Nexora.Models.ViewModels;
 
@@ -43,4 +44,6 @@ public class ProductFormViewModel
     public bool IsFeatured { get; set; }
 
     public string? ImageUrls { get; set; }
+
+    public List<IFormFile>? ImageFiles { get; set; }
 }

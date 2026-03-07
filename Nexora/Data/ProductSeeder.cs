@@ -11,7 +11,7 @@ public static class ProductSeeder
         if (await db.Products.AnyAsync())
             return;
 
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Data", "products-seed.json");
+        var jsonPath = Path.Combine(AppContext.BaseDirectory, "Data", "products-seed.json");
         if (!File.Exists(jsonPath))
         {
             Console.WriteLine("products-seed.json not found, skipping product seed.");
@@ -28,17 +28,14 @@ public static class ProductSeeder
 
         foreach (var item in items)
         {
-            // Clean up name
-            var name = item.Name.Replace("Mẫu mới", "").Trim();
-
             var product = new Product
             {
-                Name = name,
+                Name = item.Name,
                 Slug = item.Slug,
                 Description = item.Description ?? "",
                 Price = item.Price,
                 OriginalPrice = item.OriginalPrice,
-                Brand = string.IsNullOrEmpty(item.Brand) ? ExtractBrand(name) : item.Brand,
+                Brand = item.Brand ?? "",
                 Color = item.Color,
                 Storage = item.Storage,
                 RAM = item.Ram,
@@ -68,20 +65,6 @@ public static class ProductSeeder
 
         await db.SaveChangesAsync();
         Console.WriteLine($"Seeded {items.Count} products.");
-    }
-
-    private static string ExtractBrand(string name)
-    {
-        var brands = new[] { "Samsung", "iPhone", "Apple", "Xiaomi", "OPPO", "vivo", "realme",
-            "Asus", "Dell", "HP", "Lenovo", "Acer", "MSI", "MacBook",
-            "Harman Kardon", "Marshall", "Baseus", "Ugreen", "Philips", "AVA+" };
-
-        foreach (var b in brands)
-        {
-            if (name.Contains(b, StringComparison.OrdinalIgnoreCase))
-                return b;
-        }
-        return "";
     }
 
     private class ProductSeedItem

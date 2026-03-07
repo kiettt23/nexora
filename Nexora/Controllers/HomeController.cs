@@ -48,18 +48,21 @@ public class HomeController : Controller
             .OrderBy(c => c.SortOrder)
             .ToListAsync();
 
-        var productsByCategory = new Dictionary<string, List<Nexora.Models.Product>>();
-        foreach (var cat in categories)
-        {
-            var products = await _db.Products
-                .Include(p => p.Images)
-                .Where(p => p.IsActive && p.CategoryId == cat.Id)
-                .OrderByDescending(p => p.CreatedAt)
-                .Take(4)
-                .ToListAsync();
-            if (products.Any())
-                productsByCategory[cat.Name] = products;
-        }
+        var activeIds = categories.Select(c => c.Id).ToList();
+        var allCategoryProducts = await _db.Products
+            .Include(p => p.Images)
+            .Where(p => p.IsActive && activeIds.Contains(p.CategoryId))
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+
+        var categoryNameMap = categories.ToDictionary(c => c.Id, c => c.Name);
+        var productsByCategory = allCategoryProducts
+            .GroupBy(p => p.CategoryId)
+            .Where(g => categoryNameMap.ContainsKey(g.Key))
+            .ToDictionary(
+                g => categoryNameMap[g.Key],
+                g => g.Take(4).ToList()
+            );
 
         // Stats
         ViewBag.TotalProducts = await _db.Products.CountAsync(p => p.IsActive);

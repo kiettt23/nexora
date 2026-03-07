@@ -58,6 +58,9 @@ public class AdminUserController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangeRole(string id, string role)
     {
+        string[] allowedRoles = ["Admin", "Staff", "Customer"];
+        if (!allowedRoles.Contains(role)) return BadRequest();
+
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) return NotFound();
 

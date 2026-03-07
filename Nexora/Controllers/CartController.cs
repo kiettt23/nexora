@@ -32,8 +32,11 @@ public class CartController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Add(int productId, int quantity = 1)
     {
+        if (quantity <= 0) quantity = 1;
+
         var product = await _db.Products.FindAsync(productId);
         if (product == null || !product.IsActive)
             return NotFound();
@@ -69,6 +72,7 @@ public class CartController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Update(int cartDetailId, int quantity)
     {
         var userId = _userManager.GetUserId(User)!;
@@ -92,6 +96,7 @@ public class CartController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Remove(int cartDetailId)
     {
         var userId = _userManager.GetUserId(User)!;

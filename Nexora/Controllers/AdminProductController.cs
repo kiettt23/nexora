@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Nexora.Data;
 using Nexora.Models;
 using Nexora.Models.ViewModels;
+using Nexora.Services;
 
 namespace Nexora.Controllers;
 
@@ -12,10 +13,12 @@ namespace Nexora.Controllers;
 public class AdminProductController : Controller
 {
     private readonly ApplicationDbContext _db;
+    private readonly CloudinaryService _cloudinary;
 
-    public AdminProductController(ApplicationDbContext db)
+    public AdminProductController(ApplicationDbContext db, CloudinaryService cloudinary)
     {
         _db = db;
+        _cloudinary = cloudinary;
     }
 
     public async Task<IActionResult> Index(string? search, int? categoryId, int page = 1)
@@ -66,10 +69,14 @@ public class AdminProductController : Controller
             return View(model);
         }
 
+        var slug = GenerateSlug(model.Name);
+        if (await _db.Products.AnyAsync(p => p.Slug == slug))
+            slug = $"{slug}-{DateTime.UtcNow.Ticks % 10000}";
+
         var product = new Product
         {
             Name = model.Name,
-            Slug = GenerateSlug(model.Name),
+            Slug = slug,
             Description = model.Description,
             Price = model.Price,
             OriginalPrice = model.OriginalPrice,
@@ -84,24 +91,21 @@ public class AdminProductController : Controller
             IsFeatured = model.IsFeatured
         };
 
-        // Handle image URLs (comma-separated)
-        if (!string.IsNullOrEmpty(model.ImageUrls))
+        var imageUrls = await CollectImageUrls(model);
+        for (int i = 0; i < imageUrls.Count; i++)
         {
-            var urls = model.ImageUrls.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            for (int i = 0; i < urls.Length; i++)
+            product.Images.Add(new ProductImage
             {
-                product.Images.Add(new ProductImage
-                {
-                    ImagePath = urls[i],
-                    SortOrder = i,
-                    IsMain = i == 0
-                });
-            }
+                ImagePath = imageUrls[i],
+                SortOrder = i,
+                IsMain = i == 0
+            });
         }
 
         _db.Products.Add(product);
         await _db.SaveChangesAsync();
 
+        TempData["Success"] = "Tạo sản phẩm thành công!";
         return RedirectToAction("Index");
     }
 
@@ -155,8 +159,12 @@ public class AdminProductController : Controller
 
         if (product == null) return NotFound();
 
+        var slug = GenerateSlug(model.Name);
+        if (await _db.Products.AnyAsync(p => p.Slug == slug && p.Id != id))
+            slug = $"{slug}-{DateTime.UtcNow.Ticks % 10000}";
+
         product.Name = model.Name;
-        product.Slug = GenerateSlug(model.Name);
+        product.Slug = slug;
         product.Description = model.Description;
         product.Price = model.Price;
         product.OriginalPrice = model.OriginalPrice;
@@ -172,21 +180,19 @@ public class AdminProductController : Controller
 
         // Update images
         _db.ProductImages.RemoveRange(product.Images);
-        if (!string.IsNullOrEmpty(model.ImageUrls))
+        var imageUrls = await CollectImageUrls(model);
+        for (int i = 0; i < imageUrls.Count; i++)
         {
-            var urls = model.ImageUrls.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            for (int i = 0; i < urls.Length; i++)
+            product.Images.Add(new ProductImage
             {
-                product.Images.Add(new ProductImage
-                {
-                    ImagePath = urls[i],
-                    SortOrder = i,
-                    IsMain = i == 0
-                });
-            }
+                ImagePath = imageUrls[i],
+                SortOrder = i,
+                IsMain = i == 0
+            });
         }
 
         await _db.SaveChangesAsync();
+        TempData["Success"] = "Cập nhật sản phẩm thành công!";
         return RedirectToAction("Index");
     }
 
@@ -203,17 +209,38 @@ public class AdminProductController : Controller
         return RedirectToAction("Index");
     }
 
+    private async Task<List<string>> CollectImageUrls(ProductFormViewModel model)
+    {
+        var urls = new List<string>();
+
+        // Upload new files to Cloudinary
+        if (model.ImageFiles != null)
+        {
+            foreach (var file in model.ImageFiles)
+            {
+                if (file.Length == 0) continue;
+                var url = await _cloudinary.UploadAsync(file);
+                if (url != null) urls.Add(url);
+            }
+        }
+
+        // Keep existing URLs
+        if (!string.IsNullOrEmpty(model.ImageUrls))
+        {
+            var existingUrls = model.ImageUrls
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            urls.AddRange(existingUrls);
+        }
+
+        return urls;
+    }
+
     private static string GenerateSlug(string name)
     {
         var slug = name.ToLowerInvariant()
-            .Replace(" ", "-")
-            .Replace("đ", "d")
-            .Replace(".", "")
-            .Replace(",", "")
-            .Replace("(", "")
-            .Replace(")", "");
+            .Replace("đ", "d");
 
-        // Remove diacritics (Vietnamese)
+        // Remove diacritics
         var normalized = slug.Normalize(System.Text.NormalizationForm.FormD);
         var sb = new System.Text.StringBuilder();
         foreach (var c in normalized)
@@ -223,9 +250,8 @@ public class AdminProductController : Controller
         }
         slug = sb.ToString();
 
-        // Remove multiple dashes
-        while (slug.Contains("--"))
-            slug = slug.Replace("--", "-");
+        // Replace non-alphanumeric with hyphen
+        slug = System.Text.RegularExpressions.Regex.Replace(slug, @"[^a-z0-9]+", "-");
 
         return slug.Trim('-');
     }

@@ -46,7 +46,14 @@
                                     onchange="this.form.submit()">
                                 @foreach (var r in new[] { "Admin", "Staff", "Customer" })
                                 {
-                                    <option value="@r" selected="@(roles.Contains(r))">@r</option>
+                                    @if (roles.Contains(r))
+                                    {
+                                        <option value="@r" selected>@r</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@r">@r</option>
+                                    }
                                 }
                             </select>
                         </form>
