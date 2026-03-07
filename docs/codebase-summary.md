@@ -1,6 +1,6 @@
 # Codebase Summary — Nexora
 
-## Controllers (9 total)
+## Controllers (11 total)
 
 | Controller | Role | Key Actions |
 |-----------|------|-------------|
@@ -13,10 +13,11 @@
 | AdminProductController | Staff/Admin | Index, Create, Edit, ToggleActive |
 | AdminCategoryController | Staff/Admin | Index, Create, Edit |
 | AdminOrderController | Staff/Admin | Index (filter by status), Detail, UpdateStatus |
+| AdminVoucherController | Admin | Index, Create, Edit, Delete |
 | AdminUserController | Admin | Index, ToggleActive, ChangeRole |
 | AdminConfigController | Admin | Index, Update, Add |
 
-## Models (9 entities)
+## Models (10 entities)
 
 | Model | Key Fields |
 |-------|-----------|
@@ -28,15 +29,19 @@
 | CartDetail | Quantity, UnitPrice |
 | Order | OrderCode, FullName, Phone, Address, TotalAmount, Status, PaymentMethod |
 | OrderDetail | ProductName, Quantity, UnitPrice |
+| Voucher | Code, DiscountPercent, DiscountAmount, MinOrderAmount, MaxDiscountAmount, UsageLimit, UsedCount, StartDate, EndDate, IsActive |
 | ShopConfig | Key, Value, Type |
 
 ## ViewModels (4)
 - LoginViewModel, RegisterViewModel, CheckoutViewModel, ProductFormViewModel
 
+## Services (1)
+- `CloudinaryService` — Upload/delete images via Cloudinary SDK (IFormFile → Cloudinary → URL)
+
 ## Views Structure
 - 2 layouts: `_Layout.cshtml` (customer), `_AdminLayout.cshtml` (admin)
 - 3 shared partials: `_ProductCard`, `_Pagination`, `_Toast`
-- ~25 view files across 11 view folders
+- ~30 view files across 12 view folders (including AdminVoucher)
 
 ## Data Layer
 - `ApplicationDbContext` — EF Core DbContext with Fluent API

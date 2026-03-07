@@ -34,7 +34,7 @@
 - 3 roles seeded: Admin, Staff, Customer
 - `[Authorize]` on all cart/order actions
 - `[Authorize(Roles = "Admin,Staff")]` on admin controllers
-- `[Authorize(Roles = "Admin")]` on user/config management
+- `[Authorize(Roles = "Admin")]` on user/config/voucher management
 
 ## Frontend
 - Tailwind CSS 3 + DaisyUI 4 (no Bootstrap)

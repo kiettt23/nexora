@@ -15,15 +15,16 @@ Nexora is a tech ecommerce website built with ASP.NET Core MVC (.NET 8). Sells p
 ## Core Features
 - Product browsing with filter/sort/search (HTMX live search)
 - Shopping cart (DB-based, login required)
-- Checkout with COD payment
+- Checkout with COD payment, voucher discount support
 - Order tracking with status timeline
-- Admin dashboard with stats
-- Product/Category/Order/User CRUD
+- Admin dashboard with stats (revenue, orders, users, top products)
+- Product/Category/Order/User/Voucher CRUD
+- Voucher system (discount %, fixed amount, min order, max discount, usage limit, date range)
+- Image upload via Cloudinary + URL fallback
 - Dark/Light theme toggle
 - Responsive design (mobile-first)
 
 ## Key Constraints
-- No voucher system
 - No guest cart (login required to buy)
 - No wishlist, no email confirmation
 - Payment: COD only

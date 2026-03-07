@@ -30,6 +30,7 @@ ASP.NET Core MVC (Model-View-Controller) with Entity Framework Core Code-First.
 - **CartDetail** (Id, CartId, ProductId, Quantity, UnitPrice)
 - **Order** (Id, UserId, OrderCode, FullName, Phone, Address, Note, TotalAmount, Status, PaymentMethod)
 - **OrderDetail** (Id, OrderId, ProductId, ProductName, Quantity, UnitPrice)
+- **Voucher** (Id, Code, Description, DiscountPercent, DiscountAmount, MinOrderAmount, MaxDiscountAmount, UsageLimit, UsedCount, StartDate, EndDate, IsActive)
 - **ShopConfig** (Id, Key, Value, Type)
 
 ### Relationships
@@ -47,7 +48,7 @@ ASP.NET Core MVC (Model-View-Controller) with Entity Framework Core Code-First.
 ## Project Structure
 ```
 Nexora/
-├── Controllers/           # 9 controllers
+├── Controllers/           # 11 controllers
 │   ├── HomeController     # Homepage
 │   ├── AccountController  # Login/Register/Logout
 │   ├── ProductController  # Customer product browsing
@@ -57,10 +58,12 @@ Nexora/
 │   ├── AdminProductController  # Product CRUD
 │   ├── AdminCategoryController # Category CRUD
 │   ├── AdminOrderController    # Order management
+│   ├── AdminVoucherController  # Voucher CRUD (Admin only)
 │   ├── AdminUserController     # User management
 │   └── AdminConfigController   # Shop config
-├── Models/                # Entity models
+├── Models/                # Entity models (10 entities)
 │   └── ViewModels/        # Form/display models
+├── Services/              # CloudinaryService (image upload)
 ├── Data/                  # DbContext, SeedData
 ├── Views/                 # Razor views (per controller)
 │   └── Shared/            # Layouts, partials
