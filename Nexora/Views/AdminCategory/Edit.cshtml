@@ -1,36 +1,45 @@
 @model Nexora.Models.Category
 @{
-    ViewData["Title"] = "Sua danh muc";
+    ViewData["Title"] = "Sửa danh mục";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-ghost btn-sm gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Quay lại
+    </a>
+</div>
+
 <div class="max-w-lg">
-    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="space-y-4">
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="bg-base-200 rounded-box p-6 shadow-sm space-y-4">
         <div class="form-control">
-            <label class="label"><span class="label-text">Ten danh muc *</span></label>
+            <label class="label"><span class="label-text">Tên danh mục *</span></label>
             <input asp-for="Name" class="input input-bordered" />
         </div>
         <div class="form-control">
-            <label class="label"><span class="label-text">Mo ta</span></label>
+            <label class="label"><span class="label-text">Mô tả</span></label>
             <textarea asp-for="Description" class="textarea textarea-bordered" rows="3"></textarea>
         </div>
         <div class="form-control">
-            <label class="label"><span class="label-text">URL hinh anh</span></label>
+            <label class="label"><span class="label-text">URL hình ảnh</span></label>
             <input asp-for="ImagePath" class="input input-bordered" />
         </div>
         <div class="form-control">
-            <label class="label"><span class="label-text">Thu tu sap xep</span></label>
+            <label class="label"><span class="label-text">Thứ tự sắp xếp</span></label>
             <input asp-for="SortOrder" type="number" class="input input-bordered w-24" />
         </div>
         <div class="form-control">
             <label class="label cursor-pointer justify-start gap-2">
                 <input asp-for="IsActive" type="checkbox" class="checkbox checkbox-primary" />
-                <span class="label-text">Hien danh muc</span>
+                <span class="label-text">Hiện danh mục</span>
             </label>
         </div>
         <div class="flex gap-3">
-            <button type="submit" class="btn btn-primary">Cap nhat</button>
-            <a asp-action="Index" class="btn btn-ghost">Huy</a>
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <a asp-action="Index" class="btn btn-ghost">Hủy</a>
         </div>
     </form>
 </div>

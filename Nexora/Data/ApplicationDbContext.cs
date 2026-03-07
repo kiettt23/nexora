@@ -128,19 +128,25 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             {
                 Id = 1, Code = "WELCOME10", Description = "Giảm 10% cho đơn đầu tiên",
                 DiscountPercent = 10, MaxDiscountAmount = 500000, MinOrderAmount = 1000000,
-                UsageLimit = 100, StartDate = new DateTime(2026, 1, 1), EndDate = new DateTime(2026, 12, 31)
+                UsageLimit = 100,
+                StartDate = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             },
             new Voucher
             {
                 Id = 2, Code = "NEXORA50K", Description = "Giảm 50.000đ cho đơn từ 500K",
                 DiscountAmount = 50000, MinOrderAmount = 500000,
-                UsageLimit = 200, StartDate = new DateTime(2026, 1, 1), EndDate = new DateTime(2026, 12, 31)
+                UsageLimit = 200,
+                StartDate = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             },
             new Voucher
             {
                 Id = 3, Code = "FREESHIP", Description = "Giảm 30.000đ phí vận chuyển",
                 DiscountAmount = 30000, MinOrderAmount = 300000,
-                UsageLimit = 500, StartDate = new DateTime(2026, 1, 1), EndDate = new DateTime(2026, 12, 31)
+                UsageLimit = 500,
+                StartDate = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             }
         );
     }

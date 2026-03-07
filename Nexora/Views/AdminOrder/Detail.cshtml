@@ -1,24 +1,33 @@
 @model Nexora.Models.Order
 @{
-    ViewData["Title"] = $"Don hang {Model.OrderCode}";
+    ViewData["Title"] = $"Đơn hàng {Model.OrderCode}";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-ghost btn-sm gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Quay lại
+    </a>
+</div>
+
 <div class="flex flex-col lg:flex-row gap-8">
     <div class="flex-1">
-        <h2 class="text-xl font-bold mb-4">Don hang @Model.OrderCode</h2>
+        <h2 class="text-xl font-bold mb-4">Đơn hàng @Model.OrderCode</h2>
 
         <!-- Status update -->
-        <div class="bg-base-200 rounded-box p-4 mb-6">
-            <p class="font-semibold mb-2">Cap nhat trang thai</p>
+        <div class="bg-base-200 rounded-box p-5 mb-6 shadow-sm">
+            <p class="font-semibold mb-3">Cập nhật trạng thái</p>
             <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post" class="flex gap-2 flex-wrap">
                 @{
                     var statuses = new[] {
-                        (Nexora.Models.OrderStatus.Pending, "Cho xac nhan", "btn-warning"),
-                        (Nexora.Models.OrderStatus.Confirmed, "Xac nhan", "btn-info"),
-                        (Nexora.Models.OrderStatus.Shipping, "Giao hang", "btn-secondary"),
-                        (Nexora.Models.OrderStatus.Delivered, "Da giao", "btn-success"),
-                        (Nexora.Models.OrderStatus.Cancelled, "Huy", "btn-error")
+                        (Nexora.Models.OrderStatus.Pending, "Chờ xác nhận", "btn-warning"),
+                        (Nexora.Models.OrderStatus.Confirmed, "Xác nhận", "btn-info"),
+                        (Nexora.Models.OrderStatus.Shipping, "Giao hàng", "btn-secondary"),
+                        (Nexora.Models.OrderStatus.Delivered, "Đã giao", "btn-success"),
+                        (Nexora.Models.OrderStatus.Cancelled, "Hủy", "btn-error")
                     };
                 }
                 @foreach (var (status, label, btnClass) in statuses)
@@ -33,31 +42,42 @@
         </div>
 
         <!-- Items -->
-        <div class="overflow-x-auto bg-base-200 rounded-box">
+        <div class="overflow-x-auto bg-base-200 rounded-box shadow-sm">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>San pham</th>
-                        <th>Don gia</th>
+                        <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
                         <th>SL</th>
-                        <th>Thanh tien</th>
+                        <th>Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.OrderDetails)
                     {
-                        <tr>
+                        <tr class="hover">
                             <td>@item.ProductName</td>
-                            <td>@item.UnitPrice.ToString("N0")d</td>
+                            <td>@item.UnitPrice.ToString("N0")₫</td>
                             <td>@item.Quantity</td>
-                            <td class="font-semibold">@((item.UnitPrice * item.Quantity).ToString("N0"))d</td>
+                            <td class="font-semibold">@((item.UnitPrice * item.Quantity).ToString("N0"))₫</td>
                         </tr>
                     }
                 </tbody>
                 <tfoot>
+                    @if (Model.DiscountAmount > 0)
+                    {
+                        <tr>
+                            <td colspan="3" class="text-right opacity-60">Tạm tính:</td>
+                            <td>@((Model.TotalAmount + Model.DiscountAmount).ToString("N0"))₫</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right opacity-60">Giảm giá (@(Model.VoucherCode ?? "")):</td>
+                            <td class="text-error">-@Model.DiscountAmount.ToString("N0")₫</td>
+                        </tr>
+                    }
                     <tr>
-                        <td colspan="3" class="text-right font-bold">Tong:</td>
-                        <td class="font-bold text-primary">@Model.TotalAmount.ToString("N0")d</td>
+                        <td colspan="3" class="text-right font-bold">Tổng:</td>
+                        <td class="font-bold text-primary">@Model.TotalAmount.ToString("N0")₫</td>
                     </tr>
                 </tfoot>
             </table>
@@ -65,18 +85,21 @@
     </div>
 
     <div class="w-full lg:w-80">
-        <div class="bg-base-200 rounded-box p-6">
-            <h3 class="font-bold mb-4">Thong tin giao hang</h3>
-            <p><span class="opacity-60">Nguoi nhan:</span> @Model.FullName</p>
-            <p><span class="opacity-60">SDT:</span> @Model.Phone</p>
-            <p><span class="opacity-60">Dia chi:</span> @Model.Address</p>
-            @if (!string.IsNullOrEmpty(Model.Note))
-            {
-                <p><span class="opacity-60">Ghi chu:</span> @Model.Note</p>
-            }
-            <p class="mt-2"><span class="opacity-60">Thanh toan:</span> @Model.PaymentMethod</p>
-            <p><span class="opacity-60">Dat luc:</span> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
-            <p><span class="opacity-60">Khach hang:</span> @Model.User.FullName (@Model.User.Email)</p>
+        <div class="bg-base-200 rounded-box p-6 shadow-sm">
+            <h3 class="font-bold mb-4">Thông tin giao hàng</h3>
+            <div class="space-y-2 text-sm">
+                <p><span class="opacity-60">Người nhận:</span> @Model.FullName</p>
+                <p><span class="opacity-60">SĐT:</span> @Model.Phone</p>
+                <p><span class="opacity-60">Địa chỉ:</span> @Model.Address</p>
+                @if (!string.IsNullOrEmpty(Model.Note))
+                {
+                    <p><span class="opacity-60">Ghi chú:</span> @Model.Note</p>
+                }
+                <div class="border-t border-base-300 my-3"></div>
+                <p><span class="opacity-60">Thanh toán:</span> @Model.PaymentMethod</p>
+                <p><span class="opacity-60">Đặt lúc:</span> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><span class="opacity-60">Khách hàng:</span> @Model.User.FullName (@Model.User.Email)</p>
+            </div>
         </div>
     </div>
 </div>

@@ -1,71 +1,91 @@
 @model List<Nexora.Models.Product>
 @{
-    ViewData["Title"] = "Quan ly san pham";
+    ViewData["Title"] = "Quản lý sản phẩm";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var categories = ViewBag.Categories as List<Nexora.Models.Category>;
 }
 
 <div class="flex justify-between items-center mb-6">
     <div class="flex gap-2">
-        <input type="text" placeholder="Tim kiem..." value="@ViewBag.Search"
+        <input type="text" placeholder="Tìm kiếm..." value="@ViewBag.Search"
                class="input input-bordered input-sm"
                onkeydown="if(event.key==='Enter') window.location.href='?search='+this.value" />
     </div>
-    <a asp-action="Create" class="btn btn-primary btn-sm">
-        + Them san pham
+    <a asp-action="Create" class="btn btn-primary btn-sm gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Thêm sản phẩm
     </a>
 </div>
 
-<div class="overflow-x-auto bg-base-200 rounded-box">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Hinh</th>
-                <th>Ten</th>
-                <th>Danh muc</th>
-                <th>Gia</th>
-                <th>Trang thai</th>
-                <th>Noi bat</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var p in Model)
-            {
-                var mainImg = p.Images.FirstOrDefault(i => i.IsMain) ?? p.Images.FirstOrDefault();
+@if (!Model.Any())
+{
+    <div class="text-center py-12 opacity-60">
+        <p>Chưa có sản phẩm nào.</p>
+    </div>
+}
+else
+{
+    <div class="overflow-x-auto bg-base-200 rounded-box shadow-sm">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @if (mainImg != null)
-                        {
-                            <div class="w-12 h-12 rounded bg-base-300 overflow-hidden">
-                                <img src="@mainImg.ImagePath" alt="" class="w-full h-full object-contain" />
-                            </div>
-                        }
-                    </td>
-                    <td class="max-w-xs">
-                        <span class="line-clamp-1 font-semibold">@p.Name</span>
-                        <span class="text-xs opacity-50">@p.Brand</span>
-                    </td>
-                    <td>@p.Category.Name</td>
-                    <td>@p.Price.ToString("N0")d</td>
-                    <td>
-                        <form asp-action="ToggleActive" asp-route-id="@p.Id" method="post">
-                            <button type="submit" class="badge @(p.IsActive ? "badge-success" : "badge-error") cursor-pointer">
-                                @(p.IsActive ? "Hien" : "An")
-                            </button>
-                        </form>
-                    </td>
-                    <td>
-                        @if (p.IsFeatured)
-                        {
-                            <span class="badge badge-primary badge-sm">Noi bat</span>
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-ghost btn-sm">Sua</a>
-                    </td>
+                    <th>Hình</th>
+                    <th>Tên</th>
+                    <th>Danh mục</th>
+                    <th>Giá</th>
+                    <th>Trạng thái</th>
+                    <th>Nổi bật</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    var mainImg = p.Images.FirstOrDefault(i => i.IsMain) ?? p.Images.FirstOrDefault();
+                    <tr class="hover">
+                        <td>
+                            @if (mainImg != null)
+                            {
+                                <div class="w-12 h-12 rounded bg-base-300 overflow-hidden">
+                                    <img src="@mainImg.ImagePath" alt="" class="w-full h-full object-contain" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="w-12 h-12 rounded bg-base-300 flex items-center justify-center opacity-30">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            }
+                        </td>
+                        <td class="max-w-xs">
+                            <span class="line-clamp-1 font-semibold">@p.Name</span>
+                            <span class="text-xs opacity-50">@p.Brand</span>
+                        </td>
+                        <td>@p.Category.Name</td>
+                        <td>@p.Price.ToString("N0")₫</td>
+                        <td>
+                            <form asp-action="ToggleActive" asp-route-id="@p.Id" method="post">
+                                <button type="submit" class="badge @(p.IsActive ? "badge-success" : "badge-error") cursor-pointer">
+                                    @(p.IsActive ? "Hiện" : "Ẩn")
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            @if (p.IsFeatured)
+                            {
+                                <span class="badge badge-primary badge-sm">Nổi bật</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-ghost btn-sm">Sửa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

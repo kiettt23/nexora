@@ -1,49 +1,69 @@
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Tổng quan";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var recentOrders = ViewBag.RecentOrders as List<Nexora.Models.Order>;
 }
 
+<!-- Stats cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-    <!-- Stats cards -->
-    <div class="stat bg-base-200 rounded-box">
+    <div class="stat bg-base-200 rounded-box shadow-sm">
+        <div class="stat-figure text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
         <div class="stat-title">Doanh thu</div>
-        <div class="stat-value text-primary text-2xl">@(((decimal)ViewBag.TotalRevenue).ToString("N0"))d</div>
-        <div class="stat-desc">Don da giao</div>
+        <div class="stat-value text-primary text-2xl">@(((decimal)ViewBag.TotalRevenue).ToString("N0"))₫</div>
+        <div class="stat-desc">Đơn đã giao</div>
     </div>
-    <div class="stat bg-base-200 rounded-box">
-        <div class="stat-title">Don hang</div>
+    <div class="stat bg-base-200 rounded-box shadow-sm">
+        <div class="stat-figure text-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+        </div>
+        <div class="stat-title">Đơn hàng</div>
         <div class="stat-value text-2xl">@ViewBag.TotalOrders</div>
-        <div class="stat-desc">@ViewBag.PendingOrders cho xu ly</div>
+        <div class="stat-desc">@ViewBag.PendingOrders chờ xử lý</div>
     </div>
-    <div class="stat bg-base-200 rounded-box">
-        <div class="stat-title">San pham</div>
+    <div class="stat bg-base-200 rounded-box shadow-sm">
+        <div class="stat-figure text-accent">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+        </div>
+        <div class="stat-title">Sản phẩm</div>
         <div class="stat-value text-2xl">@ViewBag.TotalProducts</div>
-        <div class="stat-desc">Dang hoat dong</div>
+        <div class="stat-desc">Đang hoạt động</div>
     </div>
-    <div class="stat bg-base-200 rounded-box">
-        <div class="stat-title">Nguoi dung</div>
+    <div class="stat bg-base-200 rounded-box shadow-sm">
+        <div class="stat-figure text-info">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+        </div>
+        <div class="stat-title">Người dùng</div>
         <div class="stat-value text-2xl">@ViewBag.TotalUsers</div>
-        <div class="stat-desc">Tong so tai khoan</div>
+        <div class="stat-desc">Tổng số tài khoản</div>
     </div>
 </div>
 
 <!-- Today stats -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <div class="stat bg-base-200 rounded-box">
-        <div class="stat-title">Don hang hom nay</div>
+    <div class="stat bg-base-200 rounded-box shadow-sm">
+        <div class="stat-title">Đơn hàng hôm nay</div>
         <div class="stat-value text-2xl">@ViewBag.TodayOrders</div>
     </div>
-    <div class="stat bg-base-200 rounded-box">
-        <div class="stat-title">Doanh thu hom nay</div>
-        <div class="stat-value text-success text-2xl">@(((decimal)ViewBag.TodayRevenue).ToString("N0"))d</div>
+    <div class="stat bg-base-200 rounded-box shadow-sm">
+        <div class="stat-title">Doanh thu hôm nay</div>
+        <div class="stat-value text-success text-2xl">@(((decimal)ViewBag.TodayRevenue).ToString("N0"))₫</div>
     </div>
 </div>
 
 <!-- Order status & Top products -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <div class="bg-base-200 rounded-box p-6">
-        <h3 class="text-lg font-bold mb-4">Phan bo trang thai don hang</h3>
+    <div class="bg-base-200 rounded-box p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-4">Phân bố trạng thái đơn hàng</h3>
         @{
             var ordersByStatus = ViewBag.OrdersByStatus as IEnumerable<dynamic>;
         }
@@ -63,21 +83,30 @@
                         "Cancelled" => "badge-error",
                         _ => ""
                     };
+                    var statusLabel = statusName switch
+                    {
+                        "Pending" => "Chờ xác nhận",
+                        "Confirmed" => "Đã xác nhận",
+                        "Shipping" => "Đang giao",
+                        "Delivered" => "Đã giao",
+                        "Cancelled" => "Đã hủy",
+                        _ => statusName
+                    };
                     <div class="flex items-center justify-between">
-                        <span class="badge @badgeClass">@statusName</span>
-                        <span class="font-semibold">@count don</span>
+                        <span class="badge @badgeClass gap-1">@statusLabel</span>
+                        <span class="font-semibold">@count đơn</span>
                     </div>
                 }
             </div>
         }
         else
         {
-            <p class="opacity-60">Chua co du lieu.</p>
+            <p class="opacity-60">Chưa có dữ liệu.</p>
         }
     </div>
 
-    <div class="bg-base-200 rounded-box p-6">
-        <h3 class="text-lg font-bold mb-4">Top san pham ban chay</h3>
+    <div class="bg-base-200 rounded-box p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-4">Top sản phẩm bán chạy</h3>
         @{
             var topProducts = ViewBag.TopProducts as IEnumerable<dynamic>;
         }
@@ -85,14 +114,14 @@
         {
             <div class="overflow-x-auto">
                 <table class="table table-sm">
-                    <thead><tr><th>San pham</th><th>SL</th><th>Doanh thu</th></tr></thead>
+                    <thead><tr><th>Sản phẩm</th><th>SL</th><th>Doanh thu</th></tr></thead>
                     <tbody>
                         @foreach (var p in topProducts)
                         {
                             <tr>
                                 <td class="max-w-[200px] truncate">@p.ProductName</td>
                                 <td>@p.TotalQty</td>
-                                <td>@(((decimal)p.TotalRevenue).ToString("N0"))d</td>
+                                <td>@(((decimal)p.TotalRevenue).ToString("N0"))₫</td>
                             </tr>
                         }
                     </tbody>
@@ -101,16 +130,16 @@
         }
         else
         {
-            <p class="opacity-60">Chua co du lieu.</p>
+            <p class="opacity-60">Chưa có dữ liệu.</p>
         }
     </div>
 </div>
 
 <!-- Recent orders -->
-<div class="bg-base-200 rounded-box p-6">
+<div class="bg-base-200 rounded-box p-6 shadow-sm">
     <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-bold">Don hang gan day</h3>
-        <a asp-controller="AdminOrder" asp-action="Index" class="btn btn-ghost btn-sm">Xem tat ca</a>
+        <h3 class="text-lg font-bold">Đơn hàng gần đây</h3>
+        <a asp-controller="AdminOrder" asp-action="Index" class="btn btn-ghost btn-sm">Xem tất cả</a>
     </div>
     @if (recentOrders != null && recentOrders.Any())
     {
@@ -118,11 +147,11 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Ma don</th>
-                        <th>Khach hang</th>
-                        <th>Tong tien</th>
-                        <th>Trang thai</th>
-                        <th>Ngay</th>
+                        <th>Mã đơn</th>
+                        <th>Khách hàng</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,11 +166,20 @@
                             Nexora.Models.OrderStatus.Cancelled => "badge-error",
                             _ => ""
                         };
-                        <tr>
+                        var statusLabel = order.Status switch
+                        {
+                            Nexora.Models.OrderStatus.Pending => "Chờ xác nhận",
+                            Nexora.Models.OrderStatus.Confirmed => "Đã xác nhận",
+                            Nexora.Models.OrderStatus.Shipping => "Đang giao",
+                            Nexora.Models.OrderStatus.Delivered => "Đã giao",
+                            Nexora.Models.OrderStatus.Cancelled => "Đã hủy",
+                            _ => order.Status.ToString()
+                        };
+                        <tr class="hover">
                             <td class="font-mono">@order.OrderCode</td>
                             <td>@order.User.FullName</td>
-                            <td>@order.TotalAmount.ToString("N0")d</td>
-                            <td><span class="badge badge-sm @statusClass">@order.Status</span></td>
+                            <td>@order.TotalAmount.ToString("N0")₫</td>
+                            <td><span class="badge badge-sm @statusClass">@statusLabel</span></td>
                             <td>@order.CreatedAt.ToString("dd/MM HH:mm")</td>
                         </tr>
                     }
@@ -151,6 +189,6 @@
     }
     else
     {
-        <p class="text-center opacity-60 py-8">Chua co don hang nao.</p>
+        <p class="text-center opacity-60 py-8">Chưa có đơn hàng nào.</p>
     }
 </div>

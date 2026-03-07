@@ -1,6 +1,6 @@
 @model List<Nexora.Models.ShopConfig>
 @{
-    ViewData["Title"] = "Cau hinh shop";
+    ViewData["Title"] = "Cấu hình cửa hàng";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -14,8 +14,8 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Edit configs -->
     <div>
-        <h3 class="text-lg font-bold mb-4">Cau hinh hien tai</h3>
-        <form asp-action="Update" method="post" class="bg-base-200 rounded-box p-6 space-y-4">
+        <h3 class="text-lg font-bold mb-4">Cấu hình hiện tại</h3>
+        <form asp-action="Update" method="post" class="bg-base-200 rounded-box p-6 shadow-sm space-y-4">
             @foreach (var config in Model)
             {
                 <div class="form-control">
@@ -33,31 +33,31 @@
                     }
                 </div>
             }
-            <button type="submit" class="btn btn-primary">Luu thay doi</button>
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
         </form>
     </div>
 
     <!-- Add new config -->
     <div>
-        <h3 class="text-lg font-bold mb-4">Them cau hinh moi</h3>
-        <form asp-action="Add" method="post" class="bg-base-200 rounded-box p-6 space-y-4">
+        <h3 class="text-lg font-bold mb-4">Thêm cấu hình mới</h3>
+        <form asp-action="Add" method="post" class="bg-base-200 rounded-box p-6 shadow-sm space-y-4">
             <div class="form-control">
                 <label class="label"><span class="label-text">Key</span></label>
                 <input type="text" name="key" class="input input-bordered" placeholder="VD: Facebook" required />
             </div>
             <div class="form-control">
-                <label class="label"><span class="label-text">Value</span></label>
+                <label class="label"><span class="label-text">Giá trị</span></label>
                 <input type="text" name="value" class="input input-bordered" />
             </div>
             <div class="form-control">
-                <label class="label"><span class="label-text">Loai</span></label>
+                <label class="label"><span class="label-text">Loại</span></label>
                 <select name="type" class="select select-bordered">
-                    <option value="string">String</option>
-                    <option value="image">Image URL</option>
-                    <option value="text">Text (dai)</option>
+                    <option value="string">Chuỗi (string)</option>
+                    <option value="image">URL hình ảnh</option>
+                    <option value="text">Văn bản dài</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-outline btn-primary">Them</button>
+            <button type="submit" class="btn btn-outline btn-primary">Thêm</button>
         </form>
     </div>
 </div>

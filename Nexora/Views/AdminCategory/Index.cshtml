@@ -1,42 +1,56 @@
 @model List<Nexora.Models.Category>
 @{
-    ViewData["Title"] = "Quan ly danh muc";
+    ViewData["Title"] = "Quản lý danh mục";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl font-bold">Danh muc san pham</h2>
-    <a asp-action="Create" class="btn btn-primary btn-sm">+ Them danh muc</a>
+    <h2 class="text-xl font-bold">Danh mục sản phẩm</h2>
+    <a asp-action="Create" class="btn btn-primary btn-sm gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Thêm danh mục
+    </a>
 </div>
 
-<div class="overflow-x-auto bg-base-200 rounded-box">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ten</th>
-                <th>Slug</th>
-                <th>Thu tu</th>
-                <th>Trang thai</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var cat in Model)
-            {
+@if (!Model.Any())
+{
+    <div class="text-center py-12 opacity-60">
+        <p>Chưa có danh mục nào.</p>
+    </div>
+}
+else
+{
+    <div class="overflow-x-auto bg-base-200 rounded-box shadow-sm">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td class="font-semibold">@cat.Name</td>
-                    <td class="font-mono text-sm">@cat.Slug</td>
-                    <td>@cat.SortOrder</td>
-                    <td>
-                        <span class="badge @(cat.IsActive ? "badge-success" : "badge-error")">
-                            @(cat.IsActive ? "Hien" : "An")
-                        </span>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-ghost btn-sm">Sua</a>
-                    </td>
+                    <th>Tên</th>
+                    <th>Slug</th>
+                    <th>Thứ tự</th>
+                    <th>Trạng thái</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var cat in Model)
+                {
+                    <tr class="hover">
+                        <td class="font-semibold">@cat.Name</td>
+                        <td class="font-mono text-sm">@cat.Slug</td>
+                        <td>@cat.SortOrder</td>
+                        <td>
+                            <span class="badge @(cat.IsActive ? "badge-success" : "badge-error")">
+                                @(cat.IsActive ? "Hiện" : "Ẩn")
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-ghost btn-sm">Sửa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

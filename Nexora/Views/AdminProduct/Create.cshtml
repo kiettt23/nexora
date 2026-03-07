@@ -1,23 +1,32 @@
 @model Nexora.Models.ViewModels.ProductFormViewModel
 @{
-    ViewData["Title"] = "Them san pham";
+    ViewData["Title"] = "Thêm sản phẩm";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-ghost btn-sm gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Quay lại
+    </a>
+</div>
+
 <div class="max-w-3xl">
-    <form asp-action="Create" method="post" class="space-y-4">
+    <form asp-action="Create" method="post" class="bg-base-200 rounded-box p-6 shadow-sm space-y-5">
         <div asp-validation-summary="All" class="alert alert-error text-sm"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="form-control">
-                <label class="label"><span class="label-text">Ten san pham *</span></label>
+                <label class="label"><span class="label-text">Tên sản phẩm *</span></label>
                 <input asp-for="Name" class="input input-bordered" />
                 <span asp-validation-for="Name" class="text-error text-sm"></span>
             </div>
             <div class="form-control">
-                <label class="label"><span class="label-text">Danh muc *</span></label>
+                <label class="label"><span class="label-text">Danh mục *</span></label>
                 <select asp-for="CategoryId" asp-items="@(ViewBag.Categories as SelectList)" class="select select-bordered">
-                    <option value="">-- Chon danh muc --</option>
+                    <option value="">-- Chọn danh mục --</option>
                 </select>
                 <span asp-validation-for="CategoryId" class="text-error text-sm"></span>
             </div>
@@ -25,15 +34,15 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="form-control">
-                <label class="label"><span class="label-text">Gia ban *</span></label>
+                <label class="label"><span class="label-text">Giá bán *</span></label>
                 <input asp-for="Price" type="number" class="input input-bordered" />
             </div>
             <div class="form-control">
-                <label class="label"><span class="label-text">Gia goc</span></label>
+                <label class="label"><span class="label-text">Giá gốc</span></label>
                 <input asp-for="OriginalPrice" type="number" class="input input-bordered" />
             </div>
             <div class="form-control">
-                <label class="label"><span class="label-text">Thuong hieu</span></label>
+                <label class="label"><span class="label-text">Thương hiệu</span></label>
                 <input asp-for="Brand" class="input input-bordered" />
             </div>
         </div>
@@ -44,11 +53,11 @@
                 <input asp-for="RAM" class="input input-bordered input-sm" />
             </div>
             <div class="form-control">
-                <label class="label"><span class="label-text">Bo nho</span></label>
+                <label class="label"><span class="label-text">Bộ nhớ</span></label>
                 <input asp-for="Storage" class="input input-bordered input-sm" />
             </div>
             <div class="form-control">
-                <label class="label"><span class="label-text">Man hinh</span></label>
+                <label class="label"><span class="label-text">Màn hình</span></label>
                 <input asp-for="ScreenSize" class="input input-bordered input-sm" />
             </div>
             <div class="form-control">
@@ -58,17 +67,17 @@
         </div>
 
         <div class="form-control">
-            <label class="label"><span class="label-text">Mau sac</span></label>
+            <label class="label"><span class="label-text">Màu sắc</span></label>
             <input asp-for="Color" class="input input-bordered" />
         </div>
 
         <div class="form-control">
-            <label class="label"><span class="label-text">Mo ta</span></label>
+            <label class="label"><span class="label-text">Mô tả</span></label>
             <textarea asp-for="Description" class="textarea textarea-bordered" rows="4"></textarea>
         </div>
 
         <div class="form-control">
-            <label class="label"><span class="label-text">URL hinh anh (cach nhau dau phay)</span></label>
+            <label class="label"><span class="label-text">URL hình ảnh (cách nhau dấu phẩy)</span></label>
             <textarea asp-for="ImageUrls" class="textarea textarea-bordered" rows="2"
                       placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"></textarea>
         </div>
@@ -76,13 +85,13 @@
         <div class="form-control">
             <label class="label cursor-pointer justify-start gap-2">
                 <input asp-for="IsFeatured" type="checkbox" class="checkbox checkbox-primary" />
-                <span class="label-text">San pham noi bat</span>
+                <span class="label-text">Sản phẩm nổi bật</span>
             </label>
         </div>
 
         <div class="flex gap-3">
-            <button type="submit" class="btn btn-primary">Tao san pham</button>
-            <a asp-action="Index" class="btn btn-ghost">Huy</a>
+            <button type="submit" class="btn btn-primary">Tạo sản phẩm</button>
+            <a asp-action="Index" class="btn btn-ghost">Hủy</a>
         </div>
     </form>
 </div>

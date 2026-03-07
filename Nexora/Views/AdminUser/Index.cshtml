@@ -1,28 +1,28 @@
 @model List<(Nexora.Models.ApplicationUser User, IList<string> Roles)>
 @{
-    ViewData["Title"] = "Quan ly nguoi dung";
+    ViewData["Title"] = "Quản lý người dùng";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="flex justify-between items-center mb-6">
     <div>
-        <input type="text" placeholder="Tim kiem..." value="@ViewBag.Search"
+        <input type="text" placeholder="Tìm kiếm..." value="@ViewBag.Search"
                class="input input-bordered input-sm"
                onkeydown="if(event.key==='Enter') window.location.href='?search='+this.value" />
     </div>
-    <span class="text-sm opacity-60">@Model.Count nguoi dung</span>
+    <span class="text-sm opacity-60">@Model.Count người dùng</span>
 </div>
 
-<div class="overflow-x-auto bg-base-200 rounded-box">
+<div class="overflow-x-auto bg-base-200 rounded-box shadow-sm">
     <table class="table">
         <thead>
             <tr>
-                <th>Ho ten</th>
+                <th>Họ tên</th>
                 <th>Email</th>
-                <th>SDT</th>
-                <th>Vai tro</th>
-                <th>Trang thai</th>
-                <th>Ngay tao</th>
+                <th>SĐT</th>
+                <th>Vai trò</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
                 <th></th>
             </tr>
         </thead>
@@ -35,10 +35,10 @@
                     "Staff" => "badge-info",
                     _ => "badge-ghost"
                 };
-                <tr>
+                <tr class="hover">
                     <td class="font-semibold">@user.FullName</td>
                     <td>@user.Email</td>
-                    <td>@(user.Phone ?? "-")</td>
+                    <td>@(user.Phone ?? "—")</td>
                     <td>
                         <form asp-action="ChangeRole" method="post" class="inline">
                             <input type="hidden" name="id" value="@user.Id" />
@@ -55,7 +55,7 @@
                         <form asp-action="ToggleActive" method="post" class="inline">
                             <input type="hidden" name="id" value="@user.Id" />
                             <button type="submit" class="badge cursor-pointer @(user.IsActive ? "badge-success" : "badge-error")">
-                                @(user.IsActive ? "Active" : "Locked")
+                                @(user.IsActive ? "Hoạt động" : "Đã khóa")
                             </button>
                         </form>
                     </td>
