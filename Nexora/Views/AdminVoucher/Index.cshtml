@@ -1,0 +1,87 @@
+@model List<Nexora.Models.Voucher>
+@{
+    ViewData["Title"] = "Quản lý Voucher";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex justify-between items-center mb-6">
+    <span class="text-sm opacity-60">@Model.Count voucher</span>
+    <a asp-action="Create" class="btn btn-primary btn-sm">+ Thêm voucher</a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success mb-4">@TempData["Success"]</div>
+}
+
+<div class="overflow-x-auto bg-base-200 rounded-box shadow-sm">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Mô tả</th>
+                <th>Giảm giá</th>
+                <th>Đơn tối thiểu</th>
+                <th>Đã dùng</th>
+                <th>Thời hạn</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in Model)
+            {
+                var isExpired = v.EndDate < DateTime.UtcNow;
+                var isMaxed = v.UsedCount >= v.UsageLimit;
+                <tr class="hover">
+                    <td class="font-mono font-semibold">@v.Code</td>
+                    <td class="text-sm max-w-48 truncate">@(v.Description ?? "—")</td>
+                    <td>
+                        @if (v.DiscountPercent > 0)
+                        {
+                            <span class="badge badge-info">@v.DiscountPercent%</span>
+                            @if (v.MaxDiscountAmount > 0)
+                            {
+                                <span class="text-xs opacity-60">tối đa @v.MaxDiscountAmount.ToString("N0")đ</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge badge-warning">@v.DiscountAmount.ToString("N0")đ</span>
+                        }
+                    </td>
+                    <td class="text-sm">@(v.MinOrderAmount > 0 ? v.MinOrderAmount.ToString("N0") + "đ" : "Không")</td>
+                    <td class="text-sm">@v.UsedCount / @v.UsageLimit</td>
+                    <td class="text-sm">
+                        @v.StartDate.ToString("dd/MM/yyyy") — @v.EndDate.ToString("dd/MM/yyyy")
+                        @if (isExpired)
+                        {
+                            <span class="badge badge-error badge-xs ml-1">Hết hạn</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!v.IsActive)
+                        {
+                            <span class="badge badge-error">Tắt</span>
+                        }
+                        else if (isExpired || isMaxed)
+                        {
+                            <span class="badge badge-warning">Hết hiệu lực</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-success">Hoạt động</span>
+                        }
+                    </td>
+                    <td class="flex gap-1">
+                        <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-ghost btn-xs">Sửa</a>
+                        <form asp-action="Delete" asp-route-id="@v.Id" method="post"
+                              onsubmit="return confirm('Xóa voucher @v.Code?')">
+                            <button type="submit" class="btn btn-ghost btn-xs text-error">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,75 @@
+@model Nexora.Models.Voucher
+@{
+    ViewData["Title"] = "Thêm Voucher";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-2xl">
+    <form asp-action="Create" method="post" class="bg-base-200 rounded-box p-6 shadow-sm space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Mã voucher *</span></label>
+                <input asp-for="Code" class="input input-bordered" placeholder="VD: SALE50" />
+                <span asp-validation-for="Code" class="text-error text-xs mt-1"></span>
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Mô tả</span></label>
+                <input asp-for="Description" class="input input-bordered" placeholder="Giảm 50% cho đơn từ 500K" />
+            </div>
+        </div>
+
+        <div class="divider text-sm opacity-60">Giảm giá (chọn 1 trong 2)</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Giảm theo %</span></label>
+                <input asp-for="DiscountPercent" type="number" min="0" max="100" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Giảm cố định (đ)</span></label>
+                <input asp-for="DiscountAmount" type="number" min="0" class="input input-bordered" />
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Đơn tối thiểu (đ)</span></label>
+                <input asp-for="MinOrderAmount" type="number" min="0" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Giảm tối đa (đ)</span></label>
+                <input asp-for="MaxDiscountAmount" type="number" min="0" class="input input-bordered" />
+                <span class="text-xs opacity-60 mt-1">Chỉ áp dụng khi giảm theo %</span>
+            </div>
+        </div>
+
+        <div class="divider text-sm opacity-60">Giới hạn & Thời hạn</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Số lần dùng tối đa</span></label>
+                <input asp-for="UsageLimit" type="number" min="1" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Ngày bắt đầu</span></label>
+                <input asp-for="StartDate" type="date" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Ngày kết thúc</span></label>
+                <input asp-for="EndDate" type="date" class="input input-bordered" />
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label class="label cursor-pointer justify-start gap-3">
+                <input asp-for="IsActive" type="checkbox" class="checkbox checkbox-primary" />
+                <span class="label-text">Kích hoạt voucher</span>
+            </label>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+            <button type="submit" class="btn btn-primary">Tạo voucher</button>
+            <a asp-action="Index" class="btn btn-ghost">Hủy</a>
+        </div>
+    </form>
+</div>
