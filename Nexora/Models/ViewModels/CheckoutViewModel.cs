@@ -22,4 +22,8 @@ public class CheckoutViewModel
     [MaxLength(500)]
     [Display(Name = "Ghi chu")]
     public string? Note { get; set; }
+
+    [MaxLength(20)]
+    [Display(Name = "Ma giam gia")]
+    public string? VoucherCode { get; set; }
 }

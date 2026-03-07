@@ -43,6 +43,37 @@
                     </div>
                 </div>
 
+                <!-- Price filter -->
+                <div>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">Khoảng giá</h4>
+                    <div class="space-y-1.5" id="price-filter">
+                        @{
+                            var priceRanges = new[] {
+                                (Min: (decimal?)null, Max: (decimal?)5000000, Label: "Dưới 5 triệu"),
+                                (Min: (decimal?)5000000, Max: (decimal?)10000000, Label: "5 - 10 triệu"),
+                                (Min: (decimal?)10000000, Max: (decimal?)20000000, Label: "10 - 20 triệu"),
+                                (Min: (decimal?)20000000, Max: (decimal?)40000000, Label: "20 - 40 triệu"),
+                                (Min: (decimal?)40000000, Max: (decimal?)null, Label: "Trên 40 triệu")
+                            };
+                            var currentMin = ViewBag.MinPrice as decimal?;
+                            var currentMax = ViewBag.MaxPrice as decimal?;
+                        }
+                        <a asp-action="Index" asp-route-category="@ViewBag.CurrentCategory" asp-route-brand="@ViewBag.CurrentBrand" asp-route-search="@ViewBag.CurrentSearch" asp-route-sort="@ViewBag.CurrentSort"
+                           class="block px-3 py-1.5 rounded-lg text-sm transition-colors @(currentMin == null && currentMax == null ? "bg-primary/10 text-primary font-medium" : "hover:bg-base-300/50 opacity-70 hover:opacity-100")">
+                            Tất cả
+                        </a>
+                        @foreach (var range in priceRanges)
+                        {
+                            var isActive = currentMin == range.Min && currentMax == range.Max;
+                            <a asp-action="Index" asp-route-category="@ViewBag.CurrentCategory" asp-route-brand="@ViewBag.CurrentBrand" asp-route-search="@ViewBag.CurrentSearch" asp-route-sort="@ViewBag.CurrentSort"
+                               asp-route-minPrice="@range.Min" asp-route-maxPrice="@range.Max"
+                               class="block px-3 py-1.5 rounded-lg text-sm transition-colors @(isActive ? "bg-primary/10 text-primary font-medium" : "hover:bg-base-300/50 opacity-70 hover:opacity-100")">
+                                @range.Label
+                            </a>
+                        }
+                    </div>
+                </div>
+
                 <!-- Brands -->
                 @if (brands != null && brands.Any())
                 {
@@ -85,7 +116,7 @@
                         onchange="window.location.href=this.value">
                     @foreach (var opt in sortOptions)
                     {
-                        var url = Url.Action("Index", new { category = ViewBag.CurrentCategory, brand = ViewBag.CurrentBrand, search = ViewBag.CurrentSearch, sort = opt.Value });
+                        var url = Url.Action("Index", new { category = ViewBag.CurrentCategory, brand = ViewBag.CurrentBrand, search = ViewBag.CurrentSearch, sort = opt.Value, minPrice = ViewBag.MinPrice, maxPrice = ViewBag.MaxPrice });
                         var isSelected = (string?)ViewBag.CurrentSort == opt.Value;
                         <option value="@url" selected="@isSelected">@opt.Label</option>
                     }
@@ -106,7 +137,9 @@
                      ["category"] = ViewBag.CurrentCategory ?? "",
                      ["brand"] = ViewBag.CurrentBrand ?? "",
                      ["search"] = ViewBag.CurrentSearch ?? "",
-                     ["sort"] = ViewBag.CurrentSort ?? ""
+                     ["sort"] = ViewBag.CurrentSort ?? "",
+                     ["minPrice"] = ViewBag.MinPrice?.ToString() ?? "",
+                     ["maxPrice"] = ViewBag.MaxPrice?.ToString() ?? ""
                  }))
         </div>
     </div>

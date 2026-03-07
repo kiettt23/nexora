@@ -28,6 +28,84 @@
     </div>
 </div>
 
+<!-- Today stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="stat bg-base-200 rounded-box">
+        <div class="stat-title">Don hang hom nay</div>
+        <div class="stat-value text-2xl">@ViewBag.TodayOrders</div>
+    </div>
+    <div class="stat bg-base-200 rounded-box">
+        <div class="stat-title">Doanh thu hom nay</div>
+        <div class="stat-value text-success text-2xl">@(((decimal)ViewBag.TodayRevenue).ToString("N0"))d</div>
+    </div>
+</div>
+
+<!-- Order status & Top products -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-base-200 rounded-box p-6">
+        <h3 class="text-lg font-bold mb-4">Phan bo trang thai don hang</h3>
+        @{
+            var ordersByStatus = ViewBag.OrdersByStatus as IEnumerable<dynamic>;
+        }
+        @if (ordersByStatus != null && ordersByStatus.Any())
+        {
+            <div class="space-y-3">
+                @foreach (var item in ordersByStatus)
+                {
+                    var statusName = (string)item.Status;
+                    var count = (int)item.Count;
+                    var badgeClass = statusName switch
+                    {
+                        "Pending" => "badge-warning",
+                        "Confirmed" => "badge-info",
+                        "Shipping" => "badge-secondary",
+                        "Delivered" => "badge-success",
+                        "Cancelled" => "badge-error",
+                        _ => ""
+                    };
+                    <div class="flex items-center justify-between">
+                        <span class="badge @badgeClass">@statusName</span>
+                        <span class="font-semibold">@count don</span>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="opacity-60">Chua co du lieu.</p>
+        }
+    </div>
+
+    <div class="bg-base-200 rounded-box p-6">
+        <h3 class="text-lg font-bold mb-4">Top san pham ban chay</h3>
+        @{
+            var topProducts = ViewBag.TopProducts as IEnumerable<dynamic>;
+        }
+        @if (topProducts != null && topProducts.Any())
+        {
+            <div class="overflow-x-auto">
+                <table class="table table-sm">
+                    <thead><tr><th>San pham</th><th>SL</th><th>Doanh thu</th></tr></thead>
+                    <tbody>
+                        @foreach (var p in topProducts)
+                        {
+                            <tr>
+                                <td class="max-w-[200px] truncate">@p.ProductName</td>
+                                <td>@p.TotalQty</td>
+                                <td>@(((decimal)p.TotalRevenue).ToString("N0"))d</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="opacity-60">Chua co du lieu.</p>
+        }
+    </div>
+</div>
+
 <!-- Recent orders -->
 <div class="bg-base-200 rounded-box p-6">
     <div class="flex justify-between items-center mb-4">

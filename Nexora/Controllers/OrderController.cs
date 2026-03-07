@@ -67,6 +67,40 @@ public class OrderController : Controller
             return View(model);
         }
 
+        var subtotal = cart.CartDetails.Sum(cd => cd.UnitPrice * cd.Quantity);
+        decimal discountAmount = 0;
+        string? appliedVoucher = null;
+
+        if (!string.IsNullOrWhiteSpace(model.VoucherCode))
+        {
+            var voucher = await _db.Vouchers.FirstOrDefaultAsync(v => v.Code == model.VoucherCode.Trim().ToUpper());
+            if (voucher == null || !voucher.IsValid)
+            {
+                ModelState.AddModelError("VoucherCode", "Mã giảm giá không hợp lệ hoặc đã hết hạn.");
+                ViewBag.CartDetails = cart.CartDetails.ToList();
+                ViewBag.Total = subtotal;
+                return View(model);
+            }
+            if (subtotal < voucher.MinOrderAmount)
+            {
+                ModelState.AddModelError("VoucherCode", $"Đơn hàng tối thiểu {voucher.MinOrderAmount:N0}đ để sử dụng mã này.");
+                ViewBag.CartDetails = cart.CartDetails.ToList();
+                ViewBag.Total = subtotal;
+                return View(model);
+            }
+
+            if (voucher.DiscountPercent > 0)
+                discountAmount = subtotal * voucher.DiscountPercent / 100;
+            else
+                discountAmount = voucher.DiscountAmount;
+
+            if (voucher.MaxDiscountAmount > 0 && discountAmount > voucher.MaxDiscountAmount)
+                discountAmount = voucher.MaxDiscountAmount;
+
+            voucher.UsedCount++;
+            appliedVoucher = voucher.Code;
+        }
+
         var orderCode = $"NX-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..4].ToUpper()}";
 
         var order = new Order
@@ -77,7 +111,9 @@ public class OrderController : Controller
             Phone = model.Phone,
             Address = model.Address,
             Note = model.Note,
-            TotalAmount = cart.CartDetails.Sum(cd => cd.UnitPrice * cd.Quantity),
+            TotalAmount = subtotal - discountAmount,
+            DiscountAmount = discountAmount,
+            VoucherCode = appliedVoucher,
             Status = OrderStatus.Pending,
             PaymentMethod = "COD",
             OrderDetails = cart.CartDetails.Select(cd => new OrderDetail

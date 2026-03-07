@@ -37,6 +37,12 @@ public class Order
     [Column(TypeName = "decimal(18,0)")]
     public decimal TotalAmount { get; set; }
 
+    [Column(TypeName = "decimal(18,0)")]
+    public decimal DiscountAmount { get; set; }
+
+    [MaxLength(20)]
+    public string? VoucherCode { get; set; }
+
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
     [MaxLength(50)]

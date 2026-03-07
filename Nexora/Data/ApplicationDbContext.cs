@@ -17,6 +17,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
     public DbSet<ShopConfig> ShopConfigs => Set<ShopConfig>();
+    public DbSet<Voucher> Vouchers => Set<Voucher>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -99,6 +100,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasIndex(sc => sc.Key).IsUnique();
         });
 
+        // Voucher
+        builder.Entity<Voucher>(e =>
+        {
+            e.HasIndex(v => v.Code).IsUnique();
+        });
+
         // Seed categories
         builder.Entity<Category>().HasData(
             new Category { Id = 1, Name = "Dien thoai", Slug = "dien-thoai", Description = "Smartphone cao cap", SortOrder = 1 },
@@ -113,6 +120,28 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             new ShopConfig { Id = 2, Key = "Phone", Value = "0123456789", Type = "string" },
             new ShopConfig { Id = 3, Key = "Email", Value = "contact@nexora.vn", Type = "string" },
             new ShopConfig { Id = 4, Key = "Address", Value = "TP. Ho Chi Minh, Viet Nam", Type = "string" }
+        );
+
+        // Seed vouchers
+        builder.Entity<Voucher>().HasData(
+            new Voucher
+            {
+                Id = 1, Code = "WELCOME10", Description = "Giảm 10% cho đơn đầu tiên",
+                DiscountPercent = 10, MaxDiscountAmount = 500000, MinOrderAmount = 1000000,
+                UsageLimit = 100, StartDate = new DateTime(2026, 1, 1), EndDate = new DateTime(2026, 12, 31)
+            },
+            new Voucher
+            {
+                Id = 2, Code = "NEXORA50K", Description = "Giảm 50.000đ cho đơn từ 500K",
+                DiscountAmount = 50000, MinOrderAmount = 500000,
+                UsageLimit = 200, StartDate = new DateTime(2026, 1, 1), EndDate = new DateTime(2026, 12, 31)
+            },
+            new Voucher
+            {
+                Id = 3, Code = "FREESHIP", Description = "Giảm 30.000đ phí vận chuyển",
+                DiscountAmount = 30000, MinOrderAmount = 300000,
+                UsageLimit = 500, StartDate = new DateTime(2026, 1, 1), EndDate = new DateTime(2026, 12, 31)
+            }
         );
     }
 }
