@@ -1,0 +1,110 @@
+@model Nexora.Models.Order
+@{
+    ViewData["Title"] = $"Đơn hàng {Model.OrderCode}";
+}
+
+<div class="container mx-auto max-w-6xl px-6 lg:px-8 py-10 lg:py-14">
+    <nav class="text-sm mb-8 flex items-center gap-2 opacity-50">
+        <a asp-action="MyOrders" class="hover:text-primary hover:opacity-100 transition-colors">Đơn hàng</a>
+        <span>/</span>
+        <span class="opacity-70">@Model.OrderCode</span>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-10">
+        <div class="flex-1">
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-8">Đơn hàng @Model.OrderCode</h1>
+
+            <!-- Status steps -->
+            <div class="flex items-center gap-0 mb-10 overflow-x-auto pb-2">
+                @{
+                    var steps = new[] {
+                        (Nexora.Models.OrderStatus.Pending, "Chờ xác nhận"),
+                        (Nexora.Models.OrderStatus.Confirmed, "Xác nhận"),
+                        (Nexora.Models.OrderStatus.Shipping, "Giao hàng"),
+                        (Nexora.Models.OrderStatus.Delivered, "Hoàn tất")
+                    };
+                }
+                @foreach (var (status, label) in steps)
+                {
+                    var isActive = Model.Status >= status;
+                    <div class="flex items-center">
+                        <div class="flex flex-col items-center">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold @(isActive ? "bg-primary text-primary-content" : "bg-base-300/30 opacity-40")">
+                                @if (isActive)
+                                {
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                }
+                            </div>
+                            <span class="text-xs mt-2 whitespace-nowrap @(isActive ? "font-medium" : "opacity-40")">@label</span>
+                        </div>
+                        @if (status != Nexora.Models.OrderStatus.Delivered)
+                        {
+                            <div class="w-12 h-0.5 mx-1 mt-[-1rem] @(Model.Status > status ? "bg-primary" : "bg-base-300/30")"></div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Items -->
+            <div class="bg-base-200/50 border border-base-300/30 rounded-2xl overflow-hidden">
+                <div class="p-5 border-b border-base-300/20">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider opacity-50">Sản phẩm đã đặt</h3>
+                </div>
+                <div class="divide-y divide-base-300/15">
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <div class="flex items-center justify-between p-5">
+                            <div class="flex-1 min-w-0">
+                                <p class="font-medium text-sm">@item.ProductName</p>
+                                <p class="text-xs opacity-40 mt-0.5">@item.UnitPrice.ToString("N0")₫ × @item.Quantity</p>
+                            </div>
+                            <span class="font-bold text-sm flex-shrink-0 ml-4">@((item.UnitPrice * item.Quantity).ToString("N0"))₫</span>
+                        </div>
+                    }
+                </div>
+                <div class="p-5 border-t border-base-300/20 flex justify-between items-center bg-base-300/10">
+                    <span class="font-bold">Tổng cộng</span>
+                    <span class="font-bold text-lg text-primary">@Model.TotalAmount.ToString("N0")₫</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="w-full lg:w-80">
+            <div class="bg-base-200/50 border border-base-300/30 rounded-2xl p-6 sticky top-20">
+                <h3 class="text-xs font-semibold uppercase tracking-wider opacity-50 mb-5">Thông tin giao hàng</h3>
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <span class="opacity-40 text-xs block mb-0.5">Người nhận</span>
+                        <span class="font-medium">@Model.FullName</span>
+                    </div>
+                    <div>
+                        <span class="opacity-40 text-xs block mb-0.5">Số điện thoại</span>
+                        <span class="font-medium">@Model.Phone</span>
+                    </div>
+                    <div>
+                        <span class="opacity-40 text-xs block mb-0.5">Địa chỉ</span>
+                        <span class="font-medium">@Model.Address</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Note))
+                    {
+                        <div>
+                            <span class="opacity-40 text-xs block mb-0.5">Ghi chú</span>
+                            <span class="font-medium">@Model.Note</span>
+                        </div>
+                    }
+                    <div>
+                        <span class="opacity-40 text-xs block mb-0.5">Thanh toán</span>
+                        <span class="font-medium">@Model.PaymentMethod</span>
+                    </div>
+                    <div>
+                        <span class="opacity-40 text-xs block mb-0.5">Ngày đặt</span>
+                        <span class="font-medium">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

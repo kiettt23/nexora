@@ -1,0 +1,62 @@
+@model List<Nexora.Models.Order>
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+}
+
+<div class="container mx-auto max-w-6xl px-6 lg:px-8 py-10 lg:py-14">
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-10">Đơn hàng của tôi</h1>
+
+    @if (Model.Any())
+    {
+        <div class="space-y-4">
+            @foreach (var order in Model)
+            {
+                var statusClass = order.Status switch
+                {
+                    Nexora.Models.OrderStatus.Pending => "bg-warning/10 text-warning",
+                    Nexora.Models.OrderStatus.Confirmed => "bg-info/10 text-info",
+                    Nexora.Models.OrderStatus.Shipping => "bg-secondary/10 text-secondary",
+                    Nexora.Models.OrderStatus.Delivered => "bg-success/10 text-success",
+                    Nexora.Models.OrderStatus.Cancelled => "bg-error/10 text-error",
+                    _ => ""
+                };
+                var statusText = order.Status switch
+                {
+                    Nexora.Models.OrderStatus.Pending => "Chờ xác nhận",
+                    Nexora.Models.OrderStatus.Confirmed => "Đã xác nhận",
+                    Nexora.Models.OrderStatus.Shipping => "Đang giao",
+                    Nexora.Models.OrderStatus.Delivered => "Đã giao",
+                    Nexora.Models.OrderStatus.Cancelled => "Đã huỷ",
+                    _ => ""
+                };
+                <a asp-action="Detail" asp-route-id="@order.Id"
+                   class="flex items-center justify-between gap-6 bg-base-200/50 border border-base-300/30 rounded-2xl p-6 hover:border-base-300/60 transition-all">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="font-mono font-bold text-sm">@order.OrderCode</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-lg @statusClass">@statusText</span>
+                        </div>
+                        <p class="text-sm opacity-40">@order.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                    <div class="text-right flex-shrink-0">
+                        <p class="font-bold text-primary">@order.TotalAmount.ToString("N0")₫</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-20 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-24">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto opacity-10 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <p class="text-lg opacity-50 mb-2">Bạn chưa có đơn hàng nào.</p>
+            <p class="text-sm opacity-30 mb-8">Hãy khám phá các sản phẩm của chúng tôi.</p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-primary px-8 shadow-lg shadow-primary/20">Mua sắm ngay</a>
+        </div>
+    }
+</div>

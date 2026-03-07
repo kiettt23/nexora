@@ -1,0 +1,42 @@
+@model List<Nexora.Models.Category>
+@{
+    ViewData["Title"] = "Quan ly danh muc";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-bold">Danh muc san pham</h2>
+    <a asp-action="Create" class="btn btn-primary btn-sm">+ Them danh muc</a>
+</div>
+
+<div class="overflow-x-auto bg-base-200 rounded-box">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ten</th>
+                <th>Slug</th>
+                <th>Thu tu</th>
+                <th>Trang thai</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model)
+            {
+                <tr>
+                    <td class="font-semibold">@cat.Name</td>
+                    <td class="font-mono text-sm">@cat.Slug</td>
+                    <td>@cat.SortOrder</td>
+                    <td>
+                        <span class="badge @(cat.IsActive ? "badge-success" : "badge-error")">
+                            @(cat.IsActive ? "Hien" : "An")
+                        </span>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-ghost btn-sm">Sua</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

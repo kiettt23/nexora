@@ -1,0 +1,179 @@
+@model Nexora.Models.Product
+@{
+    ViewData["Title"] = Model.Name;
+    var relatedProducts = ViewBag.RelatedProducts as List<Nexora.Models.Product>;
+    var mainImage = Model.Images.FirstOrDefault(i => i.IsMain) ?? Model.Images.FirstOrDefault();
+    var hasDiscount = Model.OriginalPrice.HasValue && Model.OriginalPrice > Model.Price;
+}
+
+<div class="container mx-auto max-w-6xl px-6 lg:px-8 py-8 lg:py-12">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-6 flex items-center gap-2 opacity-50 flex-wrap">
+        <a asp-controller="Home" asp-action="Index" class="hover:text-primary hover:opacity-100 transition-colors">Trang chủ</a>
+        <span class="opacity-40">/</span>
+        <a asp-controller="Product" asp-action="Index" class="hover:text-primary hover:opacity-100 transition-colors">Sản phẩm</a>
+        <span class="opacity-40">/</span>
+        <a asp-controller="Product" asp-action="Index" asp-route-category="@Model.Category.Slug" class="hover:text-primary hover:opacity-100 transition-colors">@Model.Category.Name</a>
+        <span class="opacity-40">/</span>
+        <span class="opacity-70 truncate max-w-[200px]">@Model.Name</span>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+        <!-- Image gallery -->
+        <div class="w-full lg:w-1/2" x-data="{ selectedImage: '@(mainImage?.ImagePath ?? "")' }">
+            <div class="bg-base-200/60 border border-base-300/40 rounded-2xl p-6 lg:p-8 mb-3 aspect-square flex items-center justify-center relative overflow-hidden">
+                @if (mainImage != null)
+                {
+                    <img :src="selectedImage" alt="@Model.Name" class="max-w-full max-h-full object-contain transition-all duration-300" />
+                }
+                else
+                {
+                    <div class="flex items-center justify-center">
+                        <span class="opacity-20 text-lg">Chưa có hình ảnh</span>
+                    </div>
+                }
+                @if (hasDiscount)
+                {
+                    var discountTop = (int)((1 - Model.Price / Model.OriginalPrice!.Value) * 100);
+                    <span class="absolute top-4 left-4 bg-error text-error-content text-xs font-bold px-2.5 py-1 rounded-lg shadow-md">
+                        -@discountTop%
+                    </span>
+                }
+            </div>
+            @if (Model.Images.Count > 1)
+            {
+                <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide">
+                    @foreach (var img in Model.Images)
+                    {
+                        <button @@click="selectedImage = '@img.ImagePath'"
+                                class="flex-shrink-0 w-18 h-18 rounded-xl overflow-hidden border-2 transition-all duration-200 hover:opacity-80"
+                                :class="selectedImage === '@img.ImagePath' ? 'border-primary shadow-md shadow-primary/20' : 'border-base-300/40 opacity-60'">
+                            <img src="@img.ImagePath" alt="" class="w-full h-full object-cover" loading="lazy" />
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Product info -->
+        <div class="w-full lg:w-1/2">
+            <div class="inline-block px-3 py-1 rounded-lg bg-primary/10 text-primary text-xs font-semibold mb-3">
+                @Model.Category.Name
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold mb-2 leading-tight">@Model.Name</h1>
+
+            @if (!string.IsNullOrEmpty(Model.Brand))
+            {
+                <p class="text-sm opacity-50 mb-5">Thương hiệu: <span class="font-medium opacity-80">@Model.Brand</span></p>
+            }
+
+            <div class="flex items-baseline gap-3 mb-6 pb-6 border-b border-base-300/20">
+                <span class="text-3xl lg:text-4xl font-extrabold text-primary">@Model.Price.ToString("N0")₫</span>
+                @if (hasDiscount)
+                {
+                    <span class="text-base line-through opacity-30">@Model.OriginalPrice!.Value.ToString("N0")₫</span>
+                    var discount = (int)((1 - Model.Price / Model.OriginalPrice.Value) * 100);
+                    <span class="bg-error/10 text-error text-sm font-bold px-2 py-0.5 rounded-lg">-@discount%</span>
+                }
+            </div>
+
+            <!-- Specs -->
+            @if (Model.RAM != null || Model.Storage != null || Model.ScreenSize != null || Model.CPU != null || Model.Color != null)
+            {
+                <div class="bg-base-200/60 border border-base-300/40 rounded-2xl p-5 mb-6">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">Thông số kỹ thuật</h3>
+                    <div class="space-y-2.5 text-sm">
+                        @if (Model.ScreenSize != null)
+                        {
+                            <div class="flex"><span class="w-28 opacity-40 shrink-0">Màn hình</span><span class="font-medium">@Model.ScreenSize</span></div>
+                        }
+                        @if (Model.CPU != null)
+                        {
+                            <div class="flex"><span class="w-28 opacity-40 shrink-0">CPU</span><span class="font-medium">@Model.CPU</span></div>
+                        }
+                        @if (Model.RAM != null)
+                        {
+                            <div class="flex"><span class="w-28 opacity-40 shrink-0">RAM</span><span class="font-medium">@Model.RAM</span></div>
+                        }
+                        @if (Model.Storage != null)
+                        {
+                            <div class="flex"><span class="w-28 opacity-40 shrink-0">Bộ nhớ</span><span class="font-medium">@Model.Storage</span></div>
+                        }
+                        @if (Model.Color != null)
+                        {
+                            <div class="flex"><span class="w-28 opacity-40 shrink-0">Màu sắc</span><span class="font-medium">@Model.Color</span></div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Add to cart -->
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form asp-controller="Cart" asp-action="Add" method="post" class="flex items-center gap-3">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="join border border-base-300/40 rounded-xl">
+                        <button type="button" class="btn btn-ghost join-item px-4" onclick="this.parentElement.querySelector('input').stepDown()">−</button>
+                        <input type="number" name="quantity" value="1" min="1" max="99"
+                               class="input w-16 text-center join-item bg-transparent border-0 focus:outline-none" />
+                        <button type="button" class="btn btn-ghost join-item px-4" onclick="this.parentElement.querySelector('input').stepUp()">+</button>
+                    </div>
+                    <button type="submit" class="btn btn-primary flex-1 lg:flex-none lg:px-10 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:brightness-110 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
+                        </svg>
+                        Thêm vào giỏ
+                    </button>
+                </form>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login"
+                   class="btn btn-primary btn-lg w-full lg:w-auto lg:px-12 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:brightness-110 transition-all">
+                    Đăng nhập để mua hàng
+                </a>
+            }
+
+            <!-- Trust mini -->
+            <div class="grid grid-cols-3 gap-3 mt-8 pt-6 border-t border-base-300/20">
+                <div class="flex items-center gap-2 justify-center p-2.5 rounded-xl bg-success/5 border border-success/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    <span class="text-xs font-semibold opacity-70">Chính hãng</span>
+                </div>
+                <div class="flex items-center gap-2 justify-center p-2.5 rounded-xl bg-info/5 border border-info/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-info shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                    <span class="text-xs font-semibold opacity-70">Freeship</span>
+                </div>
+                <div class="flex items-center gap-2 justify-center p-2.5 rounded-xl bg-warning/5 border border-warning/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-warning shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    <span class="text-xs font-semibold opacity-70">Đổi trả 30 ngày</span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="mt-8">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider opacity-50 mb-3">Mô tả sản phẩm</h3>
+                    <div class="prose prose-sm max-w-none opacity-70 leading-relaxed">
+                        @Html.Raw(Model.Description)
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Related products -->
+    @if (relatedProducts != null && relatedProducts.Any())
+    {
+        <section class="mt-16 pt-10 border-t border-base-300/20">
+            <h2 class="text-2xl font-bold mb-6">Sản phẩm liên quan</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+                @foreach (var rp in relatedProducts)
+                {
+                    @await Html.PartialAsync("~/Views/Shared/Partials/_ProductCard.cshtml", rp)
+                }
+            </div>
+        </section>
+    }
+</div>

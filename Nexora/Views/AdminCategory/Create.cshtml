@@ -1,0 +1,31 @@
+@model Nexora.Models.Category
+@{
+    ViewData["Title"] = "Them danh muc";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-lg">
+    <form asp-action="Create" method="post" class="space-y-4">
+        <div class="form-control">
+            <label class="label"><span class="label-text">Ten danh muc *</span></label>
+            <input asp-for="Name" class="input input-bordered" />
+            <span asp-validation-for="Name" class="text-error text-sm"></span>
+        </div>
+        <div class="form-control">
+            <label class="label"><span class="label-text">Mo ta</span></label>
+            <textarea asp-for="Description" class="textarea textarea-bordered" rows="3"></textarea>
+        </div>
+        <div class="form-control">
+            <label class="label"><span class="label-text">URL hinh anh</span></label>
+            <input asp-for="ImagePath" class="input input-bordered" />
+        </div>
+        <div class="form-control">
+            <label class="label"><span class="label-text">Thu tu sap xep</span></label>
+            <input asp-for="SortOrder" type="number" class="input input-bordered w-24" />
+        </div>
+        <div class="flex gap-3">
+            <button type="submit" class="btn btn-primary">Tao</button>
+            <a asp-action="Index" class="btn btn-ghost">Huy</a>
+        </div>
+    </form>
+</div>

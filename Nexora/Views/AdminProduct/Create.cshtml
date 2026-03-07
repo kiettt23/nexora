@@ -1,0 +1,88 @@
+@model Nexora.Models.ViewModels.ProductFormViewModel
+@{
+    ViewData["Title"] = "Them san pham";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-3xl">
+    <form asp-action="Create" method="post" class="space-y-4">
+        <div asp-validation-summary="All" class="alert alert-error text-sm"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Ten san pham *</span></label>
+                <input asp-for="Name" class="input input-bordered" />
+                <span asp-validation-for="Name" class="text-error text-sm"></span>
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Danh muc *</span></label>
+                <select asp-for="CategoryId" asp-items="@(ViewBag.Categories as SelectList)" class="select select-bordered">
+                    <option value="">-- Chon danh muc --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-error text-sm"></span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Gia ban *</span></label>
+                <input asp-for="Price" type="number" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Gia goc</span></label>
+                <input asp-for="OriginalPrice" type="number" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Thuong hieu</span></label>
+                <input asp-for="Brand" class="input input-bordered" />
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">RAM</span></label>
+                <input asp-for="RAM" class="input input-bordered input-sm" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Bo nho</span></label>
+                <input asp-for="Storage" class="input input-bordered input-sm" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Man hinh</span></label>
+                <input asp-for="ScreenSize" class="input input-bordered input-sm" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">CPU</span></label>
+                <input asp-for="CPU" class="input input-bordered input-sm" />
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Mau sac</span></label>
+            <input asp-for="Color" class="input input-bordered" />
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">Mo ta</span></label>
+            <textarea asp-for="Description" class="textarea textarea-bordered" rows="4"></textarea>
+        </div>
+
+        <div class="form-control">
+            <label class="label"><span class="label-text">URL hinh anh (cach nhau dau phay)</span></label>
+            <textarea asp-for="ImageUrls" class="textarea textarea-bordered" rows="2"
+                      placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"></textarea>
+        </div>
+
+        <div class="form-control">
+            <label class="label cursor-pointer justify-start gap-2">
+                <input asp-for="IsFeatured" type="checkbox" class="checkbox checkbox-primary" />
+                <span class="label-text">San pham noi bat</span>
+            </label>
+        </div>
+
+        <div class="flex gap-3">
+            <button type="submit" class="btn btn-primary">Tao san pham</button>
+            <a asp-action="Index" class="btn btn-ghost">Huy</a>
+        </div>
+    </form>
+</div>

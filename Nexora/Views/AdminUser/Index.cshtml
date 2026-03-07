@@ -1,0 +1,68 @@
+@model List<(Nexora.Models.ApplicationUser User, IList<string> Roles)>
+@{
+    ViewData["Title"] = "Quan ly nguoi dung";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <input type="text" placeholder="Tim kiem..." value="@ViewBag.Search"
+               class="input input-bordered input-sm"
+               onkeydown="if(event.key==='Enter') window.location.href='?search='+this.value" />
+    </div>
+    <span class="text-sm opacity-60">@Model.Count nguoi dung</span>
+</div>
+
+<div class="overflow-x-auto bg-base-200 rounded-box">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ho ten</th>
+                <th>Email</th>
+                <th>SDT</th>
+                <th>Vai tro</th>
+                <th>Trang thai</th>
+                <th>Ngay tao</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (user, roles) in Model)
+            {
+                var roleBadge = roles.FirstOrDefault() switch
+                {
+                    "Admin" => "badge-error",
+                    "Staff" => "badge-info",
+                    _ => "badge-ghost"
+                };
+                <tr>
+                    <td class="font-semibold">@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@(user.Phone ?? "-")</td>
+                    <td>
+                        <form asp-action="ChangeRole" method="post" class="inline">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <select name="role" class="select select-bordered select-xs"
+                                    onchange="this.form.submit()">
+                                @foreach (var r in new[] { "Admin", "Staff", "Customer" })
+                                {
+                                    <option value="@r" selected="@(roles.Contains(r))">@r</option>
+                                }
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="ToggleActive" method="post" class="inline">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <button type="submit" class="badge cursor-pointer @(user.IsActive ? "badge-success" : "badge-error")">
+                                @(user.IsActive ? "Active" : "Locked")
+                            </button>
+                        </form>
+                    </td>
+                    <td class="text-sm">@user.CreatedAt.ToString("dd/MM/yyyy")</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,54 @@
+@model List<Nexora.Models.Order>
+@{
+    ViewData["Title"] = "Quan ly don hang";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex gap-2 mb-6 flex-wrap">
+    <a asp-action="Index" class="btn btn-sm @(ViewBag.CurrentStatus == null ? "btn-primary" : "btn-ghost")">Tat ca</a>
+    <a asp-action="Index" asp-route-status="@Nexora.Models.OrderStatus.Pending"
+       class="btn btn-sm @(ViewBag.CurrentStatus != null && (Nexora.Models.OrderStatus)ViewBag.CurrentStatus == Nexora.Models.OrderStatus.Pending ? "btn-warning" : "btn-ghost")">Cho xac nhan</a>
+    <a asp-action="Index" asp-route-status="@Nexora.Models.OrderStatus.Confirmed"
+       class="btn btn-sm @(ViewBag.CurrentStatus != null && (Nexora.Models.OrderStatus)ViewBag.CurrentStatus == Nexora.Models.OrderStatus.Confirmed ? "btn-info" : "btn-ghost")">Da xac nhan</a>
+    <a asp-action="Index" asp-route-status="@Nexora.Models.OrderStatus.Shipping"
+       class="btn btn-sm @(ViewBag.CurrentStatus != null && (Nexora.Models.OrderStatus)ViewBag.CurrentStatus == Nexora.Models.OrderStatus.Shipping ? "btn-secondary" : "btn-ghost")">Dang giao</a>
+    <a asp-action="Index" asp-route-status="@Nexora.Models.OrderStatus.Delivered"
+       class="btn btn-sm @(ViewBag.CurrentStatus != null && (Nexora.Models.OrderStatus)ViewBag.CurrentStatus == Nexora.Models.OrderStatus.Delivered ? "btn-success" : "btn-ghost")">Da giao</a>
+</div>
+
+<div class="overflow-x-auto bg-base-200 rounded-box">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ma don</th>
+                <th>Khach hang</th>
+                <th>Tong tien</th>
+                <th>Trang thai</th>
+                <th>Ngay</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                var statusClass = order.Status switch
+                {
+                    Nexora.Models.OrderStatus.Pending => "badge-warning",
+                    Nexora.Models.OrderStatus.Confirmed => "badge-info",
+                    Nexora.Models.OrderStatus.Shipping => "badge-secondary",
+                    Nexora.Models.OrderStatus.Delivered => "badge-success",
+                    Nexora.Models.OrderStatus.Cancelled => "badge-error",
+                    _ => ""
+                };
+                <tr>
+                    <td class="font-mono">@order.OrderCode</td>
+                    <td>@order.User.FullName</td>
+                    <td>@order.TotalAmount.ToString("N0")d</td>
+                    <td><span class="badge badge-sm @statusClass">@order.Status</span></td>
+                    <td>@order.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td><a asp-action="Detail" asp-route-id="@order.Id" class="btn btn-ghost btn-sm">Chi tiet</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

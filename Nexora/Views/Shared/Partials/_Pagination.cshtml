@@ -1,0 +1,20 @@
+@model (int CurrentPage, int TotalPages, string Action, string Controller, Dictionary<string, string>? RouteValues)
+
+@if (Model.TotalPages > 1)
+{
+    <div class="join flex justify-center mt-8">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            var routeValues = Model.RouteValues != null
+                ? new Dictionary<string, string>(Model.RouteValues)
+                : new Dictionary<string, string>();
+            routeValues["page"] = i.ToString();
+
+            <a asp-controller="@Model.Controller" asp-action="@Model.Action"
+               asp-all-route-data="@routeValues"
+               class="join-item btn @(i == Model.CurrentPage ? "btn-primary" : "")">
+                @i
+            </a>
+        }
+    </div>
+}

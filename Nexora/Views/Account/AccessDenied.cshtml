@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Truy cập bị từ chối";
+}
+
+<div class="container mx-auto max-w-6xl px-6 lg:px-8 py-10 lg:py-14">
+    <div class="flex items-center justify-center min-h-[50vh]">
+        <div class="text-center max-w-md">
+            <p class="text-8xl md:text-9xl font-bold text-error/20 mb-4">403</p>
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-3">Truy cập bị từ chối</h1>
+            <p class="opacity-50 mb-8">Bạn không có quyền truy cập trang này.</p>
+            <a asp-controller="Home" asp-action="Index"
+               class="inline-flex px-6 py-3 rounded-xl bg-primary text-primary-content font-medium text-sm shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+</div>

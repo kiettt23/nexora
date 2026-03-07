@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var recentOrders = ViewBag.RecentOrders as List<Nexora.Models.Order>;
+}
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+    <!-- Stats cards -->
+    <div class="stat bg-base-200 rounded-box">
+        <div class="stat-title">Doanh thu</div>
+        <div class="stat-value text-primary text-2xl">@(((decimal)ViewBag.TotalRevenue).ToString("N0"))d</div>
+        <div class="stat-desc">Don da giao</div>
+    </div>
+    <div class="stat bg-base-200 rounded-box">
+        <div class="stat-title">Don hang</div>
+        <div class="stat-value text-2xl">@ViewBag.TotalOrders</div>
+        <div class="stat-desc">@ViewBag.PendingOrders cho xu ly</div>
+    </div>
+    <div class="stat bg-base-200 rounded-box">
+        <div class="stat-title">San pham</div>
+        <div class="stat-value text-2xl">@ViewBag.TotalProducts</div>
+        <div class="stat-desc">Dang hoat dong</div>
+    </div>
+    <div class="stat bg-base-200 rounded-box">
+        <div class="stat-title">Nguoi dung</div>
+        <div class="stat-value text-2xl">@ViewBag.TotalUsers</div>
+        <div class="stat-desc">Tong so tai khoan</div>
+    </div>
+</div>
+
+<!-- Recent orders -->
+<div class="bg-base-200 rounded-box p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold">Don hang gan day</h3>
+        <a asp-controller="AdminOrder" asp-action="Index" class="btn btn-ghost btn-sm">Xem tat ca</a>
+    </div>
+    @if (recentOrders != null && recentOrders.Any())
+    {
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ma don</th>
+                        <th>Khach hang</th>
+                        <th>Tong tien</th>
+                        <th>Trang thai</th>
+                        <th>Ngay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in recentOrders)
+                    {
+                        var statusClass = order.Status switch
+                        {
+                            Nexora.Models.OrderStatus.Pending => "badge-warning",
+                            Nexora.Models.OrderStatus.Confirmed => "badge-info",
+                            Nexora.Models.OrderStatus.Shipping => "badge-secondary",
+                            Nexora.Models.OrderStatus.Delivered => "badge-success",
+                            Nexora.Models.OrderStatus.Cancelled => "badge-error",
+                            _ => ""
+                        };
+                        <tr>
+                            <td class="font-mono">@order.OrderCode</td>
+                            <td>@order.User.FullName</td>
+                            <td>@order.TotalAmount.ToString("N0")d</td>
+                            <td><span class="badge badge-sm @statusClass">@order.Status</span></td>
+                            <td>@order.CreatedAt.ToString("dd/MM HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-center opacity-60 py-8">Chua co don hang nao.</p>
+    }
+</div>

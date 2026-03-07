@@ -1,0 +1,457 @@
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<!-- Hero -->
+<section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-base-200 via-base-100 to-base-100"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/5 rounded-full blur-3xl animate-pulse-slow"></div>
+    <div class="absolute top-20 right-[10%] w-[200px] h-[200px] bg-accent/5 rounded-full blur-3xl animate-float"></div>
+    <div class="absolute bottom-0 left-[15%] w-[300px] h-[200px] bg-secondary/5 rounded-full blur-3xl"></div>
+
+    <div class="container mx-auto max-w-6xl px-6 lg:px-8 relative z-10">
+        <div class="max-w-2xl mx-auto text-center py-14 lg:py-20">
+            <div class="inline-flex items-center gap-2 mb-5 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-sm animate-fade-in">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-primary font-medium text-xs">Ưu đãi đặc biệt tháng 3</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-5 tracking-tight animate-slide-up">
+                Công nghệ<br/><span class="text-gradient-brand">thế hệ mới</span>
+            </h1>
+            <p class="text-base md:text-lg opacity-50 mb-7 max-w-md mx-auto leading-relaxed animate-fade-in">
+                Khám phá điện thoại, laptop, tablet và phụ kiện công nghệ chính hãng với giá tốt nhất.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center animate-slide-up">
+                <a asp-controller="Product" asp-action="Index"
+                   class="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-primary text-primary-content font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300">
+                    Mua sắm ngay
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </a>
+                <a asp-controller="Product" asp-action="Index" asp-route-category="dien-thoai"
+                   class="inline-flex items-center justify-center px-7 py-3 rounded-xl border border-base-content/15 font-semibold text-sm hover:border-primary/40 hover:bg-primary/5 hover:-translate-y-0.5 transition-all duration-300">
+                    Xem điện thoại
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="py-10 lg:py-12 px-6 lg:px-8">
+    <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold mb-1.5">Danh mục sản phẩm</h2>
+            <p class="opacity-40 text-sm">Chọn danh mục bạn quan tâm</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+            @{
+                var categories = new[] {
+                    ("dien-thoai", "Điện thoại", "Smartphone chính hãng", "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"),
+                    ("laptop", "Laptop", "Văn phòng & Gaming", "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"),
+                    ("tablet", "Tablet", "Máy tính bảng", "M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"),
+                    ("phu-kien", "Phụ kiện", "Cáp, sạc, chuột, ốp...", "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z")
+                };
+            }
+            @foreach (var (slug, name, desc, icon) in categories)
+            {
+                <a asp-controller="Product" asp-action="Index" asp-route-category="@slug"
+                   class="group flex flex-col items-center text-center p-5 lg:p-6 rounded-2xl bg-base-200/50 border border-base-300/30
+                          hover:bg-base-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1
+                          transition-all duration-300 card-premium">
+                    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="@icon" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-sm mb-0.5">@name</h3>
+                    <p class="text-xs opacity-40">@desc</p>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Flash Sale / Deal Hot -->
+<section class="py-10 lg:py-12 px-6 lg:px-8" x-data="flashSaleTimer()" x-init="startTimer()">
+    <div class="container mx-auto max-w-6xl">
+        <div class="relative rounded-2xl bg-gradient-to-r from-error/10 via-error/5 to-primary/10 border border-error/20 p-6 lg:p-8 overflow-hidden">
+            <!-- Decorative -->
+            <div class="absolute top-0 right-0 w-40 h-40 bg-error/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+
+            <div class="relative z-10">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-error/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-extrabold">
+                                <span class="text-error">Deal</span> Hot Hôm Nay
+                            </h2>
+                            <p class="text-xs opacity-50">Giảm giá cực sốc - Số lượng có hạn</p>
+                        </div>
+                    </div>
+                    <!-- Countdown -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs opacity-50 mr-1">Kết thúc sau:</span>
+                        <div class="flex items-center gap-1.5">
+                            <div class="bg-base-100/80 rounded-lg px-2.5 py-1.5 min-w-[40px] text-center border border-base-300/30">
+                                <span class="text-sm font-bold text-error" x-text="hours">00</span>
+                            </div>
+                            <span class="text-error font-bold text-xs">:</span>
+                            <div class="bg-base-100/80 rounded-lg px-2.5 py-1.5 min-w-[40px] text-center border border-base-300/30">
+                                <span class="text-sm font-bold text-error" x-text="minutes">00</span>
+                            </div>
+                            <span class="text-error font-bold text-xs">:</span>
+                            <div class="bg-base-100/80 rounded-lg px-2.5 py-1.5 min-w-[40px] text-center border border-base-300/30">
+                                <span class="text-sm font-bold text-error" x-text="seconds">00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sale products preview - show featured products with discount -->
+                @{
+                    var featured = ViewBag.FeaturedProducts as List<Nexora.Models.Product>;
+                    var saleProducts = featured?.Where(p => p.OriginalPrice.HasValue && p.OriginalPrice > p.Price).Take(4).ToList();
+                }
+                @if (saleProducts != null && saleProducts.Any())
+                {
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+                        @foreach (var product in saleProducts)
+                        {
+                            <partial name="Partials/_ProductCard" model="product" />
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-6 opacity-50 text-sm">
+                        <p>Đang cập nhật sản phẩm khuyến mãi...</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- New Arrivals -->
+<section class="py-10 lg:py-12 px-6 lg:px-8">
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex items-end justify-between mb-6">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold mb-1">Hàng mới về</h2>
+                <p class="opacity-40 text-sm">Sản phẩm vừa cập nhật mới nhất</p>
+            </div>
+            <a asp-controller="Product" asp-action="Index"
+               class="hidden md:inline-flex items-center gap-1.5 text-sm font-medium opacity-50 hover:opacity-100 hover:text-primary transition-all">
+                Xem tất cả
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+        @{
+            var newArrivals = ViewBag.NewArrivals as List<Nexora.Models.Product>;
+        }
+        @if (newArrivals != null && newArrivals.Any())
+        {
+            <div class="relative">
+                <div class="flex gap-3 lg:gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory">
+                    @foreach (var product in newArrivals)
+                    {
+                        <div class="w-[180px] md:w-[220px] flex-shrink-0 snap-start">
+                            <partial name="Partials/_ProductCard" model="product" />
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="text-center mt-6 md:hidden">
+                <a asp-controller="Product" asp-action="Index"
+                   class="inline-flex px-6 py-2.5 rounded-xl border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-all">
+                    Xem tất cả sản phẩm mới
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Featured Brands -->
+<section class="py-8 lg:py-10 px-6 lg:px-8">
+    <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-6">
+            <h2 class="text-lg md:text-xl font-bold opacity-80">Thương hiệu nổi bật</h2>
+        </div>
+        <div class="flex items-center justify-center flex-wrap gap-4 lg:gap-6">
+            @{
+                var brandList = new[] {
+                    ("Apple", "apple"),
+                    ("Samsung", "samsung"),
+                    ("Xiaomi", "xiaomi"),
+                    ("OPPO", "oppo"),
+                    ("Dell", "dell"),
+                    ("ASUS", "asus"),
+                    ("Lenovo", "lenovo"),
+                    ("Sony", "sony")
+                };
+            }
+            @foreach (var (brandName, brandSlug) in brandList)
+            {
+                <a asp-controller="Product" asp-action="Index" asp-route-brand="@brandName"
+                   class="group flex items-center justify-center px-5 py-3 rounded-xl bg-base-200/40 border border-base-300/20
+                          hover:border-primary/30 hover:bg-primary/5 hover:shadow-md hover:shadow-primary/5
+                          transition-all duration-300 min-w-[100px]">
+                    <span class="text-sm font-semibold opacity-50 group-hover:opacity-100 group-hover:text-primary transition-all">@brandName</span>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Stats / Social Proof -->
+<section class="py-10 lg:py-12 px-6 lg:px-8">
+    <div class="container mx-auto max-w-6xl">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            @{
+                var totalProducts = (int)(ViewBag.TotalProducts ?? 0);
+                var totalBrands = (int)(ViewBag.TotalBrands ?? 0);
+                var totalCategories = (int)(ViewBag.TotalCategories ?? 0);
+                var stats = new[] {
+                    ("10,000+", "Khách hàng tin tưởng", "text-primary", "bg-primary/10", "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"),
+                    (totalProducts.ToString("N0") + "+", "Sản phẩm chính hãng", "text-accent", "bg-accent/10", "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"),
+                    (totalBrands.ToString() + "+", "Thương hiệu uy tín", "text-secondary", "bg-secondary/10", "M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"),
+                    ("4.9/5", "Đánh giá trung bình", "text-warning", "bg-warning/10", "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z")
+                };
+            }
+            @foreach (var (number, label, textColor, bgColor, icon) in stats)
+            {
+                <div class="relative group p-5 lg:p-6 rounded-2xl bg-base-200/40 border border-base-300/20 hover:border-base-300/40 text-center transition-all duration-300 overflow-hidden">
+                    <div class="w-10 h-10 rounded-xl @bgColor flex items-center justify-center mx-auto mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 @textColor" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="@icon" />
+                        </svg>
+                    </div>
+                    <div class="text-2xl md:text-3xl font-extrabold @textColor mb-1">@number</div>
+                    <div class="text-xs opacity-40 font-medium">@label</div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-10 lg:py-12 px-6 lg:px-8 bg-base-200/20">
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex items-end justify-between mb-6">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold mb-1">Sản phẩm nổi bật</h2>
+                <p class="opacity-40 text-sm">Những sản phẩm được yêu thích nhất</p>
+            </div>
+            <a asp-controller="Product" asp-action="Index"
+               class="hidden md:inline-flex items-center gap-1.5 text-sm font-medium opacity-50 hover:opacity-100 hover:text-primary transition-all">
+                Xem tất cả
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+        @if (featured != null && featured.Any())
+        {
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
+                @foreach (var product in featured)
+                {
+                    <partial name="Partials/_ProductCard" model="product" />
+                }
+            </div>
+            <div class="text-center mt-8 md:hidden">
+                <a asp-controller="Product" asp-action="Index"
+                   class="inline-flex px-6 py-2.5 rounded-xl border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-all">
+                    Xem tất cả sản phẩm
+                </a>
+            </div>
+        }
+        else
+        {
+            <p class="text-center opacity-50 py-8">Chưa có sản phẩm nào.</p>
+        }
+    </div>
+</section>
+
+<!-- Browse by Category (Tabbed) -->
+<section class="py-10 lg:py-12 px-6 lg:px-8" x-data="{ activeTab: 0 }">
+    <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold mb-1.5">Khám phá theo danh mục</h2>
+            <p class="opacity-40 text-sm">Duyệt sản phẩm theo từng loại</p>
+        </div>
+        @{
+            var productsByCategory = ViewBag.ProductsByCategory as Dictionary<string, List<Nexora.Models.Product>>;
+        }
+        @if (productsByCategory != null && productsByCategory.Any())
+        {
+            var catEntries = productsByCategory.Select((kvp, i) => new { Name = kvp.Key, Products = kvp.Value, Index = i }).ToList();
+
+            <!-- Tabs -->
+            <div class="flex items-center justify-center gap-2 mb-6 flex-wrap">
+                @foreach (var entry in catEntries)
+                {
+                    <button @@click="activeTab = @entry.Index"
+                            :class="activeTab === @entry.Index ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'bg-base-200/50 border-base-300/30 hover:border-primary/30 hover:bg-primary/5'"
+                            class="px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200 cursor-pointer">
+                        @entry.Name
+                    </button>
+                }
+            </div>
+
+            <!-- Tab Content -->
+            @foreach (var entry in catEntries)
+            {
+                <div x-show="activeTab === @entry.Index" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+                        @foreach (var product in entry.Products)
+                        {
+                            <partial name="Partials/_ProductCard" model="product" />
+                        }
+                    </div>
+                    <div class="text-center mt-6">
+                        <a asp-controller="Product" asp-action="Index"
+                           class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-all">
+                            Xem tất cả @entry.Name
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<!-- Why choose Nexora -->
+<section class="py-12 lg:py-16 px-6 lg:px-8">
+    <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl md:text-3xl font-bold mb-2">Tại sao chọn <span class="text-gradient-brand">Nexora</span>?</h2>
+            <p class="opacity-40 text-sm max-w-md mx-auto">Hàng ngàn khách hàng đã tin tưởng mua sắm tại Nexora</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            @{
+                var reasons = new[] {
+                    ("Chính hãng 100%", "Mọi sản phẩm đều có tem chính hãng, hóa đơn đầy đủ và bảo hành từ nhà sản xuất.", "text-success", "bg-success/10", "border-success/20", "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"),
+                    ("Giao hàng siêu tốc", "Giao trong 2h tại nội thành, miễn phí vận chuyển cho đơn từ 500K trở lên.", "text-info", "bg-info/10", "border-info/20", "M13 10V3L4 14h7v7l9-11h-7z"),
+                    ("Đổi trả 30 ngày", "Hoàn tiền 100% nếu sản phẩm lỗi. Hỗ trợ đổi trả tận nhà, không phát sinh phí.", "text-warning", "bg-warning/10", "border-warning/20", "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"),
+                    ("Hỗ trợ 24/7", "Đội ngũ tư vấn nhiệt tình, hỗ trợ kỹ thuật chuyên nghiệp qua chat, điện thoại.", "text-primary", "bg-primary/10", "border-primary/20", "M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z")
+                };
+            }
+            @foreach (var (title, desc, textColor, bgColor, borderColor, icon) in reasons)
+            {
+                <div class="group p-5 lg:p-6 rounded-2xl bg-base-200/40 border border-base-300/20 hover:border-base-300/40 hover:bg-base-200/60 transition-all duration-300">
+                    <div class="w-11 h-11 rounded-xl @bgColor flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 @textColor" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="@icon" />
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-sm mb-2">@title</h4>
+                    <p class="text-xs opacity-40 leading-relaxed">@desc</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Customer Testimonials -->
+<section class="py-10 lg:py-12 px-6 lg:px-8 bg-base-200/20">
+    <div class="container mx-auto max-w-6xl">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold mb-1.5">Khách hàng nói gì?</h2>
+            <p class="opacity-40 text-sm">Đánh giá từ những khách hàng đã mua sắm tại Nexora</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @{
+                var testimonials = new[] {
+                    ("Minh Tuấn", "Mua iPhone 15 Pro Max", "Giao hàng nhanh, sản phẩm chính hãng seal nguyên. Giá tốt hơn nhiều cửa hàng khác, lại còn được tặng ốp lưng. Rất hài lòng!", 5),
+                    ("Thu Hà", "Mua MacBook Air M2", "Đặt hàng chiều, sáng hôm sau đã nhận. Máy mới 100%, bảo hành 12 tháng Apple. Nhân viên tư vấn nhiệt tình, hỗ trợ cài đặt từ A-Z.", 5),
+                    ("Hoàng Nam", "Mua Samsung Galaxy S24 Ultra", "Lần đầu mua online mà yên tâm thế này. Kiểm tra hàng trước khi nhận, có hóa đơn đầy đủ. Sẽ quay lại mua phụ kiện thêm.", 5)
+                };
+            }
+            @foreach (var (name, purchase, review, stars) in testimonials)
+            {
+                <div class="p-5 lg:p-6 rounded-2xl bg-base-100/60 border border-base-300/20 hover:border-base-300/40 transition-all duration-300">
+                    <!-- Stars -->
+                    <div class="flex items-center gap-0.5 mb-3">
+                        @for (int i = 0; i < stars; i++)
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-warning fill-warning" viewBox="0 0 24 24">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
+                        }
+                    </div>
+                    <p class="text-sm opacity-60 leading-relaxed mb-4">"@review"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                            <span class="text-primary font-bold text-sm">@name[0]</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold">@name</p>
+                            <p class="text-[11px] opacity-40">@purchase</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter CTA -->
+<section class="py-10 lg:py-12 px-6 lg:px-8">
+    <div class="container mx-auto max-w-6xl">
+        <div class="relative rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border border-primary/15 p-8 lg:p-12 overflow-hidden text-center">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-primary/5 rounded-full blur-3xl"></div>
+            <div class="relative z-10">
+                <h2 class="text-xl md:text-2xl font-bold mb-2">Nhận ưu đãi độc quyền</h2>
+                <p class="text-sm opacity-50 mb-6 max-w-md mx-auto">Đăng ký nhận thông tin để không bỏ lỡ những deal hời và sản phẩm mới nhất từ Nexora.</p>
+                <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Đã đăng ký!'; this.querySelector('button').disabled=true;">
+                    <input type="email" placeholder="Email của bạn" required
+                           class="input input-bordered flex-1 bg-base-100/60 focus:bg-base-100 text-sm" />
+                    <button type="submit" class="btn btn-primary px-6 shadow-lg shadow-primary/20 hover:shadow-primary/40 text-sm font-semibold">
+                        Đăng ký ngay
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+function flashSaleTimer() {
+    return {
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+        startTimer() {
+            const updateTimer = () => {
+                const now = new Date();
+                const endOfDay = new Date(now);
+                endOfDay.setHours(23, 59, 59, 999);
+                const diff = endOfDay - now;
+                if (diff <= 0) { this.hours = '00'; this.minutes = '00'; this.seconds = '00'; return; }
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                this.hours = String(h).padStart(2, '0');
+                this.minutes = String(m).padStart(2, '0');
+                this.seconds = String(s).padStart(2, '0');
+            };
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+    }
+}
+</script>
+}

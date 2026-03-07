@@ -1,0 +1,71 @@
+@model List<Nexora.Models.Product>
+@{
+    ViewData["Title"] = "Quan ly san pham";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var categories = ViewBag.Categories as List<Nexora.Models.Category>;
+}
+
+<div class="flex justify-between items-center mb-6">
+    <div class="flex gap-2">
+        <input type="text" placeholder="Tim kiem..." value="@ViewBag.Search"
+               class="input input-bordered input-sm"
+               onkeydown="if(event.key==='Enter') window.location.href='?search='+this.value" />
+    </div>
+    <a asp-action="Create" class="btn btn-primary btn-sm">
+        + Them san pham
+    </a>
+</div>
+
+<div class="overflow-x-auto bg-base-200 rounded-box">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Hinh</th>
+                <th>Ten</th>
+                <th>Danh muc</th>
+                <th>Gia</th>
+                <th>Trang thai</th>
+                <th>Noi bat</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                var mainImg = p.Images.FirstOrDefault(i => i.IsMain) ?? p.Images.FirstOrDefault();
+                <tr>
+                    <td>
+                        @if (mainImg != null)
+                        {
+                            <div class="w-12 h-12 rounded bg-base-300 overflow-hidden">
+                                <img src="@mainImg.ImagePath" alt="" class="w-full h-full object-contain" />
+                            </div>
+                        }
+                    </td>
+                    <td class="max-w-xs">
+                        <span class="line-clamp-1 font-semibold">@p.Name</span>
+                        <span class="text-xs opacity-50">@p.Brand</span>
+                    </td>
+                    <td>@p.Category.Name</td>
+                    <td>@p.Price.ToString("N0")d</td>
+                    <td>
+                        <form asp-action="ToggleActive" asp-route-id="@p.Id" method="post">
+                            <button type="submit" class="badge @(p.IsActive ? "badge-success" : "badge-error") cursor-pointer">
+                                @(p.IsActive ? "Hien" : "An")
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        @if (p.IsFeatured)
+                        {
+                            <span class="badge badge-primary badge-sm">Noi bat</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-ghost btn-sm">Sua</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

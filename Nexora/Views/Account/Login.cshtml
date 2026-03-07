@@ -1,0 +1,55 @@
+@model Nexora.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="flex items-center justify-center min-h-[75vh] px-6">
+    <div class="w-full max-w-md animate-fade-in">
+        <div class="text-center mb-8">
+            <a asp-controller="Home" asp-action="Index" class="inline-block text-2xl font-extrabold tracking-tight mb-4">
+                <span class="text-gradient-brand">Nex</span>ora
+            </a>
+            <h2 class="text-2xl font-bold tracking-tight">Đăng nhập</h2>
+            <p class="text-sm opacity-40 mt-1.5">Chào mừng bạn quay trở lại</p>
+        </div>
+
+        <div class="bg-base-200/50 border border-base-300/30 rounded-2xl p-7 shadow-xl shadow-black/5">
+            <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All" class="bg-error/10 border border-error/20 text-error text-sm rounded-xl p-4 mb-6"></div>
+                }
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm font-medium opacity-70 mb-1.5 block">Email</label>
+                        <input asp-for="Email" type="email" placeholder="email@example.com"
+                               class="input input-bordered w-full bg-base-100/50 focus:bg-base-100 focus:border-primary/50 transition-all" />
+                        <span asp-validation-for="Email" class="text-error text-xs mt-1"></span>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-medium opacity-70 mb-1.5 block">Mật khẩu</label>
+                        <input asp-for="Password" type="password" placeholder="••••••"
+                               class="input input-bordered w-full bg-base-100/50 focus:bg-base-100 focus:border-primary/50 transition-all" />
+                        <span asp-validation-for="Password" class="text-error text-xs mt-1"></span>
+                    </div>
+
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="RememberMe" type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+                        <span class="text-sm opacity-60">Ghi nhớ đăng nhập</span>
+                    </label>
+
+                    <button type="submit" class="btn btn-primary w-full shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:brightness-110 transition-all">
+                        Đăng nhập
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <p class="text-center text-sm mt-6 opacity-50">
+            Chưa có tài khoản?
+            <a asp-action="Register" class="text-primary font-medium opacity-100 hover:underline">Đăng ký ngay</a>
+        </p>
+    </div>
+</div>

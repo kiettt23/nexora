@@ -1,0 +1,40 @@
+@model Nexora.Models.Order
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<div class="container mx-auto max-w-6xl px-6 lg:px-8 py-10 lg:py-14">
+    <div class="flex items-center justify-center min-h-[50vh]">
+        <div class="text-center max-w-lg">
+            <div class="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">Đặt hàng thành công!</h1>
+            <p class="opacity-50 mb-8">Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất.</p>
+
+            <div class="bg-base-200/50 border border-base-300/30 rounded-2xl p-6 mb-8">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider opacity-50">Mã đơn hàng</span>
+                    <span class="font-mono font-bold text-primary">@Model.OrderCode</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider opacity-50">Tổng tiền</span>
+                    <span class="font-bold text-lg">@Model.TotalAmount.ToString("N0")₫</span>
+                </div>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+                <a asp-action="Detail" asp-route-id="@Model.Id"
+                   class="px-6 py-3 rounded-xl bg-base-200/60 border border-base-300/40 font-medium text-sm hover:border-base-300/70 transition-all">
+                    Xem chi tiết đơn hàng
+                </a>
+                <a asp-controller="Product" asp-action="Index"
+                   class="px-6 py-3 rounded-xl bg-primary text-primary-content font-medium text-sm shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+                    Tiếp tục mua sắm
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+@model List<Nexora.Models.ShopConfig>
+@{
+    ViewData["Title"] = "Cau hinh shop";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success mb-4">
+        <span>@TempData["Success"]</span>
+    </div>
+}
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Edit configs -->
+    <div>
+        <h3 class="text-lg font-bold mb-4">Cau hinh hien tai</h3>
+        <form asp-action="Update" method="post" class="bg-base-200 rounded-box p-6 space-y-4">
+            @foreach (var config in Model)
+            {
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">@config.Key</span>
+                        <span class="label-text-alt badge badge-ghost badge-sm">@config.Type</span>
+                    </label>
+                    @if (config.Type == "text")
+                    {
+                        <textarea name="values[@config.Id]" class="textarea textarea-bordered" rows="3">@config.Value</textarea>
+                    }
+                    else
+                    {
+                        <input type="text" name="values[@config.Id]" value="@config.Value" class="input input-bordered" />
+                    }
+                </div>
+            }
+            <button type="submit" class="btn btn-primary">Luu thay doi</button>
+        </form>
+    </div>
+
+    <!-- Add new config -->
+    <div>
+        <h3 class="text-lg font-bold mb-4">Them cau hinh moi</h3>
+        <form asp-action="Add" method="post" class="bg-base-200 rounded-box p-6 space-y-4">
+            <div class="form-control">
+                <label class="label"><span class="label-text">Key</span></label>
+                <input type="text" name="key" class="input input-bordered" placeholder="VD: Facebook" required />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Value</span></label>
+                <input type="text" name="value" class="input input-bordered" />
+            </div>
+            <div class="form-control">
+                <label class="label"><span class="label-text">Loai</span></label>
+                <select name="type" class="select select-bordered">
+                    <option value="string">String</option>
+                    <option value="image">Image URL</option>
+                    <option value="text">Text (dai)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-outline btn-primary">Them</button>
+        </form>
+    </div>
+</div>

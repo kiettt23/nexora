@@ -1,0 +1,10 @@
+<div x-data="{ show: false, message: '', type: 'success' }"
+     x-on:toast.window="show = true; message = $event.detail.message; type = $event.detail.type || 'success'; setTimeout(() => show = false, 3000)"
+     x-show="show"
+     x-transition
+     class="toast toast-top toast-end z-50"
+     style="display: none;">
+    <div :class="'alert alert-' + type">
+        <span x-text="message"></span>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+@model Nexora.Models.Order
+@{
+    ViewData["Title"] = $"Don hang {Model.OrderCode}";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex flex-col lg:flex-row gap-8">
+    <div class="flex-1">
+        <h2 class="text-xl font-bold mb-4">Don hang @Model.OrderCode</h2>
+
+        <!-- Status update -->
+        <div class="bg-base-200 rounded-box p-4 mb-6">
+            <p class="font-semibold mb-2">Cap nhat trang thai</p>
+            <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post" class="flex gap-2 flex-wrap">
+                @{
+                    var statuses = new[] {
+                        (Nexora.Models.OrderStatus.Pending, "Cho xac nhan", "btn-warning"),
+                        (Nexora.Models.OrderStatus.Confirmed, "Xac nhan", "btn-info"),
+                        (Nexora.Models.OrderStatus.Shipping, "Giao hang", "btn-secondary"),
+                        (Nexora.Models.OrderStatus.Delivered, "Da giao", "btn-success"),
+                        (Nexora.Models.OrderStatus.Cancelled, "Huy", "btn-error")
+                    };
+                }
+                @foreach (var (status, label, btnClass) in statuses)
+                {
+                    <button type="submit" name="status" value="@((int)status)"
+                            class="btn btn-sm @btnClass @(Model.Status == status ? "btn-active" : "btn-outline")"
+                            @(Model.Status == status ? "disabled" : "")>
+                        @label
+                    </button>
+                }
+            </form>
+        </div>
+
+        <!-- Items -->
+        <div class="overflow-x-auto bg-base-200 rounded-box">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>San pham</th>
+                        <th>Don gia</th>
+                        <th>SL</th>
+                        <th>Thanh tien</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.UnitPrice.ToString("N0")d</td>
+                            <td>@item.Quantity</td>
+                            <td class="font-semibold">@((item.UnitPrice * item.Quantity).ToString("N0"))d</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right font-bold">Tong:</td>
+                        <td class="font-bold text-primary">@Model.TotalAmount.ToString("N0")d</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="w-full lg:w-80">
+        <div class="bg-base-200 rounded-box p-6">
+            <h3 class="font-bold mb-4">Thong tin giao hang</h3>
+            <p><span class="opacity-60">Nguoi nhan:</span> @Model.FullName</p>
+            <p><span class="opacity-60">SDT:</span> @Model.Phone</p>
+            <p><span class="opacity-60">Dia chi:</span> @Model.Address</p>
+            @if (!string.IsNullOrEmpty(Model.Note))
+            {
+                <p><span class="opacity-60">Ghi chu:</span> @Model.Note</p>
+            }
+            <p class="mt-2"><span class="opacity-60">Thanh toan:</span> @Model.PaymentMethod</p>
+            <p><span class="opacity-60">Dat luc:</span> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+            <p><span class="opacity-60">Khach hang:</span> @Model.User.FullName (@Model.User.Email)</p>
+        </div>
+    </div>
+</div>
