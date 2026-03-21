@@ -7,15 +7,16 @@ using Nexora.Models;
 using Nexora.Models.ViewModels;
 using Nexora.Services;
 
-namespace Nexora.Controllers;
+namespace Nexora.Areas.Admin.Controllers;
 
+[Area("Admin")]
 [Authorize(Roles = "Admin,Staff")]
-public class AdminProductController : Controller
+public class ProductController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly CloudinaryService _cloudinary;
 
-    public AdminProductController(ApplicationDbContext db, CloudinaryService cloudinary)
+    public ProductController(ApplicationDbContext db, CloudinaryService cloudinary)
     {
         _db = db;
         _cloudinary = cloudinary;

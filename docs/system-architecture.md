@@ -48,28 +48,32 @@ ASP.NET Core MVC (Model-View-Controller) with Entity Framework Core Code-First.
 ## Project Structure
 ```
 Nexora/
-├── Controllers/           # 11 controllers
-│   ├── HomeController     # Homepage
-│   ├── AccountController  # Login/Register/Logout
-│   ├── ProductController  # Customer product browsing
-│   ├── CartController     # Shopping cart
-│   ├── OrderController    # Checkout, order history
-│   ├── AdminController    # Dashboard
-│   ├── AdminProductController  # Product CRUD
-│   ├── AdminCategoryController # Category CRUD
-│   ├── AdminOrderController    # Order management
-│   ├── AdminVoucherController  # Voucher CRUD (Admin only)
-│   ├── AdminUserController     # User management
-│   └── AdminConfigController   # Shop config
-├── Models/                # Entity models (10 entities)
-│   └── ViewModels/        # Form/display models
-├── Services/              # CloudinaryService (image upload)
-├── Data/                  # DbContext, SeedData
-├── Views/                 # Razor views (per controller)
-│   └── Shared/            # Layouts, partials
-└── wwwroot/               # Static files (CSS, JS)
+├── Areas/
+│   └── Admin/
+│       ├── Controllers/       # 7 Admin controllers (Area-based)
+│       │   ├── DashboardController  # Dashboard stats
+│       │   ├── ProductController    # Product CRUD
+│       │   ├── CategoryController   # Category CRUD
+│       │   ├── OrderController      # Order management
+│       │   ├── VoucherController    # Voucher CRUD (Admin only)
+│       │   ├── UserController       # User management
+│       │   └── ConfigController     # Shop config
+│       └── Views/             # Admin views + _AdminLayout
+├── Controllers/               # 5 Customer controllers
+│   ├── HomeController         # Homepage
+│   ├── AccountController      # Login/Register/Logout
+│   ├── ProductController      # Customer product browsing
+│   ├── CartController         # Shopping cart
+│   └── OrderController        # Checkout, order history
+├── Models/                    # Entity models (10 entities)
+│   └── ViewModels/            # Form/display models
+├── Services/                  # CloudinaryService (image upload)
+├── Data/                      # DbContext, SeedData
+├── Views/                     # Customer views
+│   └── Shared/                # _Layout, partials
+└── wwwroot/                   # Static files (CSS, JS)
 ```
 
 ## Layouts
-- `_Layout.cshtml` — Customer-facing (navbar, footer, theme toggle)
-- `_AdminLayout.cshtml` — Admin panel (sidebar + topbar)
+- `Views/Shared/_Layout.cshtml` — Customer-facing (navbar, footer, theme toggle)
+- `Areas/Admin/Views/Shared/_AdminLayout.cshtml` — Admin panel (sidebar + topbar)

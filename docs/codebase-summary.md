@@ -1,21 +1,26 @@
 # Codebase Summary — Nexora
 
-## Controllers (11 total)
+## Controllers (12 total — Areas-based)
 
+### Customer Controllers (Controllers/)
 | Controller | Role | Key Actions |
 |-----------|------|-------------|
 | HomeController | Public | Index (homepage) |
-| AccountController | Public | Login, Register, Logout, AccessDenied |
+| AccountController | Public | Login, Register, Logout, AccessDenied, Profile |
 | ProductController | Public | Index (listing + filter/sort/search), Detail |
 | CartController | Customer | Index, Add, Update, Remove, Count |
 | OrderController | Customer | Checkout (GET/POST), Success, MyOrders, Detail |
-| AdminController | Staff/Admin | Index (dashboard with stats) |
-| AdminProductController | Staff/Admin | Index, Create, Edit, ToggleActive |
-| AdminCategoryController | Staff/Admin | Index, Create, Edit |
-| AdminOrderController | Staff/Admin | Index (filter by status), Detail, UpdateStatus |
-| AdminVoucherController | Admin | Index, Create, Edit, Delete |
-| AdminUserController | Admin | Index, ToggleActive, ChangeRole |
-| AdminConfigController | Admin | Index, Update, Add |
+
+### Admin Area Controllers (Areas/Admin/Controllers/)
+| Controller | Role | Key Actions |
+|-----------|------|-------------|
+| DashboardController | Staff/Admin | Index (dashboard with stats) |
+| ProductController | Staff/Admin | Index, Create, Edit, ToggleActive |
+| CategoryController | Staff/Admin | Index, Create, Edit |
+| OrderController | Staff/Admin | Index (filter by status), Detail, UpdateStatus |
+| VoucherController | Admin | Index, Create, Edit, Delete |
+| UserController | Admin | Index, ToggleActive, ChangeRole |
+| ConfigController | Admin | Index, Update, Add |
 
 ## Models (10 entities)
 
@@ -39,9 +44,9 @@
 - `CloudinaryService` — Upload/delete images via Cloudinary SDK (IFormFile → Cloudinary → URL)
 
 ## Views Structure
-- 2 layouts: `_Layout.cshtml` (customer), `_AdminLayout.cshtml` (admin)
+- 2 layouts: `Views/Shared/_Layout.cshtml` (customer), `Areas/Admin/Views/Shared/_AdminLayout.cshtml` (admin)
 - 3 shared partials: `_ProductCard`, `_Pagination`, `_Toast`
-- ~30 view files across 12 view folders (including AdminVoucher)
+- Customer views in `Views/` (5 folders), Admin views in `Areas/Admin/Views/` (7 folders)
 
 ## Data Layer
 - `ApplicationDbContext` — EF Core DbContext with Fluent API

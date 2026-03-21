@@ -139,7 +139,7 @@
 <div class="bg-base-200 rounded-box p-6 shadow-sm">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-bold">Đơn hàng gần đây</h3>
-        <a asp-controller="AdminOrder" asp-action="Index" class="btn btn-ghost btn-sm">Xem tất cả</a>
+        <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-ghost btn-sm">Xem tất cả</a>
     </div>
     @if (recentOrders != null && recentOrders.Any())
     {

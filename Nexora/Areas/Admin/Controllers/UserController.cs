@@ -5,15 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Nexora.Data;
 using Nexora.Models;
 
-namespace Nexora.Controllers;
+namespace Nexora.Areas.Admin.Controllers;
 
+[Area("Admin")]
 [Authorize(Roles = "Admin")]
-public class AdminUserController : Controller
+public class UserController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AdminUserController(
+    public UserController(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {

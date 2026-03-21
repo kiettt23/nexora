@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Nexora.Data;
 using Nexora.Models;
 
-namespace Nexora.Controllers;
+namespace Nexora.Areas.Admin.Controllers;
 
+[Area("Admin")]
 [Authorize(Roles = "Admin,Staff")]
-public class AdminController : Controller
+public class DashboardController : Controller
 {
     private readonly ApplicationDbContext _db;
 
-    public AdminController(ApplicationDbContext db)
+    public DashboardController(ApplicationDbContext db)
     {
         _db = db;
     }

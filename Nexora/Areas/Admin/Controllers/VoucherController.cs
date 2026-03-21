@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Nexora.Data;
 using Nexora.Models;
 
-namespace Nexora.Controllers;
+namespace Nexora.Areas.Admin.Controllers;
 
+[Area("Admin")]
 [Authorize(Roles = "Admin")]
-public class AdminVoucherController : Controller
+public class VoucherController : Controller
 {
     private readonly ApplicationDbContext _db;
 
-    public AdminVoucherController(ApplicationDbContext db)
+    public VoucherController(ApplicationDbContext db)
     {
         _db = db;
     }
